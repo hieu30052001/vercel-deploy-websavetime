@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #errorInput { display: none; margin-top: 10px; }
+    button { margin: 10px 0; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Web Lưu Thời Gian</h1>
+  <label for="username">Tên đăng nhập:</label>
+  <input type="text" id="username" placeholder="Nhập tên đăng nhập">
+  <br>
+  <button id="controlButton">Bắt đầu</button>
+  <div id="errorInput">
+    <label for="error">Tên lỗi:</label>
+    <input type="text" id="error" placeholder="Nhập lỗi">
+    <button id="submitError">Lưu</button>
+  </div>
+  <script>
+    let isRunning = false;
+    let startTime;
+
+    const controlButton = document.getElementById('controlButton');
+    const errorInput = document.getElementById('errorInput');
+    const usernameInput = document.getElementById('username');
+    const submitErrorButton = document.getElementById('submitError');
+
+    controlButton.addEventListener('click', () => {
+      const username = usernameInput.value.trim();
+      if (!username) {
+        alert("Vui lòng nhập tên đăng nhập.");
+        return;
+      }
+
+      if (!isRunning) {
+        // Bắt đầu
+        startTime = new Date();
+        isRunning = true;
+        controlButton.innerText = "Dừng";
+        errorInput.style.display = "none";
+      } else {
+        // Dừng
+        isRunning = false;
+        controlButton.innerText = "Bắt đầu";
+        errorInput.style.display = "block";
+      }
+    });
+
+    submitErrorButton.addEventListener('click', async () => {
+      const errorName = document.getElementById('error').value.trim();
+      if (!errorName) {
+        alert("Vui lòng nhập tên lỗi.");
+        return;
+      }
+
+      const endTime = new Date();
+      const data = {
+        username: usernameInput.value,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString(),
+        error: errorName
+      };
+
+      // Gửi dữ liệu đến server
+      const response = await fetch('https://m-inhnhat2009-github-io.vercel.app/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        alert("Lưu dữ liệu thành công.");
+        errorInput.style.display = "none";
+      } else {
+        alert("Đã xảy ra lỗi khi lưu.");
+      }
+    });
+  </script>
+</body>
+</html>
