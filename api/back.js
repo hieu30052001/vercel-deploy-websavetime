@@ -7,7 +7,8 @@ const app = express();
 const dbConfig = {
   user: 'nhat1', // Tên người dùng (username)
   password: 'minhnhat1', // Mật khẩu
-  server: '192.168.10.10,1433', // Địa chỉ IP công cộng của máy chủ SQL Server
+  server: '192.168.10.10', // Địa chỉ IP công cộng của máy chủ SQL Server
+  port: 1433,
   database: 'test', // Tên cơ sở dữ liệu
   options: {
     //encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
