@@ -13,6 +13,7 @@ const dbConfig = {
   options: {
     //encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
     trustServerCertificate: true, // Bật tùy chọn này nếu dùng máy chủ cục bộ
+    requestTimeout: 30000, // Tăng timeout lên 30 giây
   },
 };
 // Kết nối với SQL Server
