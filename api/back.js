@@ -8,10 +8,9 @@ const dbConfig = {
   user: 'nhat1', // Tên người dùng (username)
   password: 'minhnhat1', // Mật khẩu
   server: 'DESKTOP-FRGK2DK\\SQLEXPRESS01', // Địa chỉ IP công cộng của máy chủ SQL Server
-  //port: 1433, //
   database: 'test', // Tên cơ sở dữ liệu
   options: {
-    encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
+    //encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
     trustServerCertificate: true, // Bật tùy chọn này nếu dùng máy chủ cục bộ
   },
 };
@@ -32,7 +31,10 @@ app.use(express.json()); // Hỗ trợ parse JSON từ request body
 // API xử lý lưu dữ liệu
 app.post('/api/back', async (req, res) => {
   const { username, startTime, endTime, error } = req.body;
-
+  username = "Nhật";
+  startTime = "2024-11-27T12:59:30.997Z";
+  endTime = "2024-11-27T13:08:49.915Z";
+  error = "Hư màng";
   // Kiểm tra dữ liệu đầu vào
   if (!username || !startTime || !endTime || !error) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' });
