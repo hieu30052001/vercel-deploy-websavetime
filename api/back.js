@@ -15,7 +15,7 @@ const dbConfig = {
     trustServerCertificate: true, // Bật tùy chọn này nếu dùng máy chủ cục bộ
   },
 };
-
+console.log(dbConfig)
 // Kết nối với SQL Server
 sql.connect(dbConfig)
   .then(() => {
@@ -40,6 +40,7 @@ app.post('/api/back', async (req, res) => {
 
   try {
     // Thêm dữ liệu vào bảng logs
+    console.log("Connecting sql")
     const pool = await sql.connect(dbConfig);
     const result = await pool.request()
       .input('username', sql.VarChar, username)
@@ -51,6 +52,8 @@ app.post('/api/back', async (req, res) => {
          OUTPUT INSERTED.id 
          VALUES (@username, @startTime, @endTime, @error)`
       );
+
+    console.log(result)
 
     const insertId = result.recordset[0]?.id; // Lấy ID của bản ghi vừa thêm
     console.log('Lưu dữ liệu thành công, ID:', insertId);
