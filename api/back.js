@@ -31,10 +31,10 @@ app.use(express.json()); // Hỗ trợ parse JSON từ request body
 // API xử lý lưu dữ liệu
 app.post('/api/back', async (req, res) => {
   const { username, startTime, endTime, error } = req.body;
-  username = "Nhật";
-  startTime = "2024-11-27T12:59:30.997Z";
-  endTime = "2024-11-27T13:08:49.915Z";
-  error = "Hư màng";
+  // username = "Nhật";
+  // startTime = "2024-11-27T12:59:30.997Z";
+  // endTime = "2024-11-27T13:08:49.915Z";
+  // error = "Hư màng";
   // Kiểm tra dữ liệu đầu vào
   if (!username || !startTime || !endTime || !error) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' });
