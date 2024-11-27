@@ -7,7 +7,7 @@ const app = express();
 const dbConfig = {
   user: 'nhat', // Tên người dùng (username)
   password: 'minhnhat1', // Mật khẩu
-  server: 'DESKTOP-FRGK2DK\\SQLEXPRESS01', // Tên hoặc địa chỉ IP của máy chủ SQL Server
+  server: 'DESKTOP-FRGK2DK\SQLEXPRESS01', // Tên hoặc địa chỉ IP của máy chủ SQL Server
   database: 'master', // Tên cơ sở dữ liệu
   options: {
     encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
