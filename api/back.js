@@ -7,7 +7,8 @@ const app = express();
 const dbConfig = {
   user: 'nhat1', // Tên người dùng (username)
   password: 'minhnhat1', // Mật khẩu
-  server: 'DESKTOP-FRGK2DK\\SQLEXPRESS01', // Địa chỉ IP công cộng của máy chủ SQL Server
+  server: '192.168.10.10', // Địa chỉ IP công cộng của máy chủ SQL Server
+  port: 1433,
   database: 'test', // Tên cơ sở dữ liệu
   options: {
     //encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
@@ -38,14 +39,7 @@ app.post('/api/back', async (req, res) => {
   try {
     // Thêm dữ liệu vào bảng logs
     console.log("Connecting sql")
-    console.log(dbConfig)
-    const pool = await sql.connect(dbConfig)
-    .then(() => {
-      console.log('Đã kết nối đến SQL Server.');
-    })
-    .catch(err => {
-      console.error('Lỗi kết nối SQL Server:', err.message);
-    });
+    const pool = await sql.connect(dbConfig);
     console.log(pool)
     const result = await pool.request()
       .input('username', sql.VarChar, username)
@@ -53,9 +47,9 @@ app.post('/api/back', async (req, res) => {
       .input('endTime', sql.DateTime, endTime)
       .input('error', sql.VarChar, error)
       .query(
-        `INSERT INTO logs (username, start_time, end_time, error) 
+        `INSERT INTO logs (id, username, start_time, end_time, error) 
          OUTPUT INSERTED.id 
-         VALUES (@username, @startTime, @endTime, @error)`
+         VALUES (1, @username, @startTime, @endTime, @error)`
       );
 
     console.log(result)
