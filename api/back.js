@@ -7,13 +7,12 @@ const app = express();
 const dbConfig = {
   user: 'nhat1', // Tên người dùng (username)
   password: 'minhnhat1', // Mật khẩu
-  server: 'DESKTOP-FRGK2DK', // Địa chỉ IP công cộng của máy chủ SQL Server
-  port: 1433, //
+  server: 'DESKTOP-FRGK2DK\\SQLEXPRESS01', // Địa chỉ IP công cộng của máy chủ SQL Server
+  //port: 1433, //
   database: 'master', // Tên cơ sở dữ liệu
   options: {
     encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
     trustServerCertificate: true, // Bật tùy chọn này nếu dùng máy chủ cục bộ
-    requestTimeout: 30000,
   },
 };
 
@@ -58,7 +57,11 @@ app.post('/api/back', async (req, res) => {
     res.status(200).json({ message: 'Lưu thành công!', id: insertId });
   } catch (err) {
     console.error('Lỗi khi lưu dữ liệu:', err.message);
-    res.status(500).json({ error: 'Lỗi khi lưu dữ liệu.' });
+    res.status(500).json({
+      error: 'Lỗi khi lưu dữ liệu.',
+      message: err.message, // Thêm thông tin chi tiết của lỗi
+      stack: err.stack, // Thêm stack trace (chỉ nên dùng trong môi trường dev)
+    });
   }
 });
 
