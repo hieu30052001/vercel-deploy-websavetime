@@ -9,7 +9,7 @@ const dbConfig = {
   password: 'minhnhat1', // Mật khẩu
   server: 'DESKTOP-FRGK2DK\\SQLEXPRESS01', // Địa chỉ IP công cộng của máy chủ SQL Server
   //port: 1433, //
-  database: 'master', // Tên cơ sở dữ liệu
+  database: 'test', // Tên cơ sở dữ liệu
   options: {
     encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
     trustServerCertificate: true, // Bật tùy chọn này nếu dùng máy chủ cục bộ
