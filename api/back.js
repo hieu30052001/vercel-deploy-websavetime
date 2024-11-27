@@ -30,8 +30,6 @@ app.use(express.json()); // Hỗ trợ parse JSON từ request body
 // API xử lý lưu dữ liệu
 app.post('/api/back', async (req, res) => {
   const { username, startTime, endTime, error } = req.body;
-  
-  console.log(req)
 
   if (!username || !startTime || !endTime || !error) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' });
@@ -40,6 +38,7 @@ app.post('/api/back', async (req, res) => {
   try {
     // Thêm dữ liệu vào bảng logs
     console.log("Connecting sql")
+    console.log(dbConfig)
     const pool = await sql.connect(dbConfig);
     const result = await pool.request()
       .input('username', sql.VarChar, username)
