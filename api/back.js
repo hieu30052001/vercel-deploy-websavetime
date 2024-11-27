@@ -1,14 +1,14 @@
-const sql = require('mysql'); // Sử dụng thư viện mssql
+const sql = require('mssql'); // Sử dụng thư viện mssql
 const cors = require('cors');
 const express = require('express');
 const app = express();
 
 // Cấu hình kết nối với SQL Server
 const dbConfig = {
-  user: process.env.DESKTOP-FRGK2DK\\DELL, // Tên người dùng (username)
-  password: process.env.DB_PASSWORD, // Mật khẩu
-  server: process.env.DB_HOST, // Tên hoặc địa chỉ IP của máy chủ SQL Server
-  database: process.env.DB_NAME, // Tên cơ sở dữ liệu
+  user: 'nhat', // Tên người dùng (username)
+  password: 'minhnhat1', // Mật khẩu
+  server: 'DESKTOP-FRGK2DK\\SQLEXPRESS01', // Tên hoặc địa chỉ IP của máy chủ SQL Server
+  database: 'master', // Tên cơ sở dữ liệu
   options: {
     encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
     trustServerCertificate: true, // Bật tùy chọn này nếu dùng máy chủ cục bộ
