@@ -39,7 +39,14 @@ app.post('/api/back', async (req, res) => {
     // Thêm dữ liệu vào bảng logs
     console.log("Connecting sql")
     console.log(dbConfig)
-    const pool = await sql.connect(dbConfig);
+    const pool = await sql.connect(dbConfig)
+    .then(() => {
+      console.log('Đã kết nối đến SQL Server.');
+    })
+    .catch(err => {
+      console.error('Lỗi kết nối SQL Server:', err.message);
+    });
+    console.log(pool)
     const result = await pool.request()
       .input('username', sql.VarChar, username)
       .input('startTime', sql.DateTime, startTime)
