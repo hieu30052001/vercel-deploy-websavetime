@@ -1,28 +1,35 @@
-const sqlite3 = require('sqlite3').verbose();
-const cors = require('cors'); // Đảm bảo đã cài đặt: npm install cors
+const sql = require('mysql'); // Sử dụng thư viện mssql
+const cors = require('cors');
 const express = require('express');
 const app = express();
 
-// Kết nối database SQLite trong bộ nhớ
-const db = new sqlite3.Database(':memory:');
+// Cấu hình kết nối với SQL Server
+const dbConfig = {
+  user: process.env.DESKTOP-FRGK2DK\\DELL, // Tên người dùng (username)
+  password: process.env.DB_PASSWORD, // Mật khẩu
+  server: process.env.DB_HOST, // Tên hoặc địa chỉ IP của máy chủ SQL Server
+  database: process.env.DB_NAME, // Tên cơ sở dữ liệu
+  options: {
+    encrypt: true, // Sử dụng mã hóa nếu cần (dành cho Azure)
+    trustServerCertificate: true, // Bật tùy chọn này nếu dùng máy chủ cục bộ
+  },
+};
 
-// Tạo bảng khi server được khởi chạy lần đầu
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS logs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT,
-    start_time TEXT,
-    end_time TEXT,
-    error TEXT
-  )`);
-});
+// Kết nối với SQL Server
+sql.connect(dbConfig)
+  .then(() => {
+    console.log('Đã kết nối đến SQL Server.');
+  })
+  .catch(err => {
+    console.error('Lỗi kết nối SQL Server:', err.message);
+  });
 
 // Middleware
 app.use(cors()); // Bật CORS cho mọi nguồn gốc
 app.use(express.json()); // Hỗ trợ parse JSON từ request body
 
-// API để xử lý lưu dữ liệu
-app.post('/api/back', (req, res) => {
+// API xử lý lưu dữ liệu
+app.post('/api/back', async (req, res) => {
   const { username, startTime, endTime, error } = req.body;
 
   // Kiểm tra dữ liệu đầu vào
@@ -30,16 +37,27 @@ app.post('/api/back', (req, res) => {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' });
   }
 
-  // Thêm dữ liệu vào bảng SQLite
-  const query = `INSERT INTO logs (username, start_time, end_time, error) VALUES (?, ?, ?, ?)`;
-  db.run(query, [username, startTime, endTime, error], function (err) {
-    if (err) {
-      console.error('Lỗi khi lưu dữ liệu:', err.message);
-      return res.status(500).json({ error: 'Lỗi khi lưu dữ liệu.' });
-    }
-    console.log('Lưu dữ liệu thành công, ID:', this.lastID);
-    return res.status(200).json({ message: 'Lưu thành công!', id: this.lastID });
-  });
+  try {
+    // Thêm dữ liệu vào bảng logs
+    const pool = await sql.connect(dbConfig);
+    const result = await pool.request()
+      .input('username', sql.VarChar, username)
+      .input('startTime', sql.DateTime, startTime)
+      .input('endTime', sql.DateTime, endTime)
+      .input('error', sql.VarChar, error)
+      .query(
+        `INSERT INTO logs (username, start_time, end_time, error) 
+         OUTPUT INSERTED.id 
+         VALUES (@username, @startTime, @endTime, @error)`
+      );
+
+    const insertId = result.recordset[0]?.id; // Lấy ID của bản ghi vừa thêm
+    console.log('Lưu dữ liệu thành công, ID:', insertId);
+    res.status(200).json({ message: 'Lưu thành công!', id: insertId });
+  } catch (err) {
+    console.error('Lỗi khi lưu dữ liệu:', err.message);
+    res.status(500).json({ error: 'Lỗi khi lưu dữ liệu.' });
+  }
 });
 
 // Xử lý các endpoint không hợp lệ
