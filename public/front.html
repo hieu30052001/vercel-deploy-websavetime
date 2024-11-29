@@ -38,6 +38,8 @@
     <script>
         let isRunning = false;
         let startTime;
+        let endTime;
+        let elapsedSeconds;
 
         const loginSection = document.getElementById('loginSection');
         const mainSection = document.getElementById('mainSection');
@@ -89,8 +91,8 @@
                 controlButton.innerText = "Dừng";
                 errorInput.style.display = "none";
             } else {
-                const endTime = new Date();
-                const elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2); // Tính thời gian lỗi
+                endTime = new Date();
+                elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2); // Tính thời gian lỗi
                 alert(`Thời gian lỗi: ${elapsedSeconds} giây`);
                 isRunning = false;
                 controlButton.innerText = "Bắt đầu";
@@ -107,7 +109,7 @@
             }
 
             //const endTime = new Date();
-            const elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2); // Tính thời gian lỗi
+            //const elapsedSeconds = ((endTime - startTime) / 1000).toFixed(2); // Tính thời gian lỗi
             const vietnamStartTime = new Date(startTime.getTime() + 7 * 60 * 60 * 1000);
             const vietnamEndTime = new Date(endTime.getTime() + 7 * 60 * 60 * 1000);
 
