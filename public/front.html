@@ -39,7 +39,7 @@
 
     <script>
         let isRunning = false;
-        let startTime, endTime, elapsedMinutes;
+        let startTime, elapsedMinutes;
 
         const loginSection = document.getElementById('loginSection');
         const mainSection = document.getElementById('mainSection');
@@ -67,30 +67,40 @@
         }
         setInterval(updateTime, 1000);
 
-        // Tải trạng thái từ localStorage
-        function loadState() {
-            const username = localStorage.getItem('username');
-            const ca = localStorage.getItem('ca');
-            const savedStartTime = localStorage.getItem('startTime');
-            const running = localStorage.getItem('isRunning') === 'true';
-
-            if (username && ca && savedStartTime && running) {
-                loginSection.style.display = 'none';
-                mainSection.style.display = 'block';
-                usernameInput.value = username;
-                caInput.value = ca;
-                startTime = new Date(savedStartTime);
-                isRunning = true;
-                controlButton.innerText = 'Dừng';
+        // Lưu trạng thái vào localStorage
+        function saveState() {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', usernameInput.value.trim());
+            localStorage.setItem('ca', caInput.value.trim());
+            if (isRunning && startTime) {
+                localStorage.setItem('isRunning', 'true');
+                localStorage.setItem('startTime', startTime);
+            } else {
+                localStorage.setItem('isRunning', 'false');
             }
         }
 
-        // Lưu trạng thái vào localStorage
-        function saveState() {
-            localStorage.setItem('username', usernameInput.value.trim());
-            localStorage.setItem('ca', caInput.value.trim());
-            localStorage.setItem('startTime', startTime);
-            localStorage.setItem('isRunning', isRunning);
+        // Tải trạng thái từ localStorage
+        function loadState() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const savedUsername = localStorage.getItem('username');
+            const savedCa = localStorage.getItem('ca');
+            const savedStartTime = localStorage.getItem('startTime');
+            const running = localStorage.getItem('isRunning') === 'true';
+
+            if (isLoggedIn) {
+                loginSection.style.display = 'none';
+                mainSection.style.display = 'block';
+                usernameInput.value = savedUsername || '';
+                caInput.value = savedCa || '';
+
+                if (running && savedStartTime) {
+                    startTime = new Date(savedStartTime);
+                    isRunning = true;
+                    controlButton.innerText = 'Dừng';
+                    errorInput.style.display = 'none';
+                }
+            }
         }
 
         // Xóa trạng thái khi đăng xuất
@@ -107,7 +117,7 @@
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
-                localStorage.setItem('username', username);
+                saveState();
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
             }
@@ -129,14 +139,14 @@
                 errorInput.style.display = 'none';
                 saveState();
             } else {
-                endTime = new Date();
+                const endTime = new Date();
                 elapsedMinutes = ((endTime - startTime) / 1000 / 60).toFixed(2);
                 alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
                 isRunning = false;
                 controlButton.innerText = 'Bắt đầu';
                 controlButton.classList.remove('stop');
                 errorInput.style.display = 'block';
-                localStorage.removeItem('isRunning');
+                saveState();
             }
         });
 
@@ -156,6 +166,7 @@
             }
 
             const vietnamStartTime = new Date(startTime.getTime() + 7 * 60 * 60 * 1000);
+            const endTime = new Date();
             const vietnamEndTime = new Date(endTime.getTime() + 7 * 60 * 60 * 1000);
 
             const data = {
