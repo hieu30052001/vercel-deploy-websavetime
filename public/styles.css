@@ -59,6 +59,11 @@ button {
     font-size: 16px;
 }
 
+button.stop {
+    background-color: red;
+    color: white;
+}
+
 button:hover {
     background-color: #45a049;
 }

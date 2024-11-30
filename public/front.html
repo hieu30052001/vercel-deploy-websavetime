@@ -125,6 +125,7 @@
                 startTime = new Date();
                 isRunning = true;
                 controlButton.innerText = 'Dừng';
+                controlButton.classList.add('stop');
                 errorInput.style.display = 'none';
                 saveState();
             } else {
@@ -133,6 +134,7 @@
                 alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
                 isRunning = false;
                 controlButton.innerText = 'Bắt đầu';
+                controlButton.classList.remove('stop');
                 errorInput.style.display = 'block';
                 localStorage.removeItem('isRunning');
             }
