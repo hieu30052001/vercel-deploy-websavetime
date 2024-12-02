@@ -11,6 +11,7 @@
         #errorInput { display: none; margin-top: 10px; }
         button { margin: 10px 0; padding: 10px 20px; }
         #currentTime { margin-top: 20px; font-weight: bold; }
+        #longTimeInput { display: none; }
     </style>
 </head>
 <body>
@@ -27,6 +28,18 @@
     <div id="mainSection" style="display: none;">
         <label for="ca">Tên Ca:</label>
         <input type="text" id="ca" placeholder="Nhập tên ca">
+        <div id="timeOptionSection">
+            <label>Chọn kiểu thời gian:</label>
+            <select id="timeOption">
+                <option value="short">Thời gian ngắn</option>
+                <option value="long">Thời gian dài</option>
+            </select>
+        </div>
+        <div id="longTimeInput">
+            <label for="longTime">Nhập thời gian dài (phút):</label>
+            <input type="number" id="longTime" placeholder="Nhập số phút">
+            <button id="submitLongTime">Lưu thời gian dài</button>
+        </div>
         <button id="controlButton">Bắt đầu</button>
         <button id="logoutButton">Đăng xuất</button>
         <div id="errorInput">
@@ -52,6 +65,9 @@
         const passwordInput = document.getElementById('password');
         const submitErrorButton = document.getElementById('submitError');
         const currentTimeDisplay = document.getElementById('currentTime');
+        const timeOption = document.getElementById('timeOption');
+        const longTimeInput = document.getElementById('longTimeInput');
+        const longTimeButton = document.getElementById('submitLongTime');
 
         const VALID_CREDENTIALS = {
             username: 'A1',
@@ -67,47 +83,6 @@
         }
         setInterval(updateTime, 1000);
 
-        // Lưu trạng thái vào localStorage
-        function saveState() {
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('username', usernameInput.value.trim());
-            localStorage.setItem('ca', caInput.value.trim());
-            if (isRunning && startTime) {
-                localStorage.setItem('isRunning', 'true');
-                localStorage.setItem('startTime', startTime);
-            } else {
-                localStorage.setItem('isRunning', 'false');
-            }
-        }
-
-        // Tải trạng thái từ localStorage
-        function loadState() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const savedUsername = localStorage.getItem('username');
-            const savedCa = localStorage.getItem('ca');
-            const savedStartTime = localStorage.getItem('startTime');
-            const running = localStorage.getItem('isRunning') === 'true';
-
-            if (isLoggedIn) {
-                loginSection.style.display = 'none';
-                mainSection.style.display = 'block';
-                usernameInput.value = savedUsername || '';
-                caInput.value = savedCa || '';
-
-                if (running && savedStartTime) {
-                    startTime = new Date(savedStartTime);
-                    isRunning = true;
-                    controlButton.innerText = 'Dừng';
-                    errorInput.style.display = 'none';
-                }
-            }
-        }
-
-        // Xóa trạng thái khi đăng xuất
-        function clearState() {
-            localStorage.clear();
-        }
-
         // Đăng nhập
         loginButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
@@ -117,13 +92,52 @@
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
-                saveState();
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
             }
         });
 
-        // Bắt đầu/Dừng ca
+        // Hiển thị phần nhập thời gian dài khi chọn
+        timeOption.addEventListener('change', () => {
+            if (timeOption.value === 'long') {
+                longTimeInput.style.display = 'block';
+                controlButton.style.display = 'none';
+            } else {
+                longTimeInput.style.display = 'none';
+                controlButton.style.display = 'block';
+            }
+        });
+
+        // Xử lý lưu thời gian dài
+        longTimeButton.addEventListener('click', async () => {
+            const longTime = parseFloat(document.getElementById('longTime').value.trim());
+            if (isNaN(longTime) || longTime <= 0) {
+                alert('Vui lòng nhập thời gian hợp lệ.');
+                return;
+            }
+
+            const data = {
+                username: VALID_CREDENTIALS.username,
+                ca: caInput.value,
+                timeType: 'long',
+                duration: longTime
+            };
+
+            const response = await fetch('https://demoweb-lemon.vercel.app/api/back', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Lưu thời gian dài thành công.');
+                longTimeInput.style.display = 'none';
+            } else {
+                alert('Đã xảy ra lỗi khi lưu thời gian dài.');
+            }
+        });
+
+        // Bắt đầu/Dừng thời gian ngắn
         controlButton.addEventListener('click', () => {
             const ca = caInput.value.trim();
             if (!ca) {
@@ -135,65 +149,46 @@
                 startTime = new Date();
                 isRunning = true;
                 controlButton.innerText = 'Dừng';
-                controlButton.classList.add('stop');
                 errorInput.style.display = 'none';
-                saveState();
             } else {
                 const endTime = new Date();
                 elapsedMinutes = ((endTime - startTime) / 1000 / 60).toFixed(2);
+
                 alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
+
+                const data = {
+                    username: VALID_CREDENTIALS.username,
+                    ca,
+                    timeType: 'short',
+                    startTime: startTime.toISOString(),
+                    endTime: endTime.toISOString(),
+                    error: '',
+                    errorDuration: parseFloat(elapsedMinutes)
+                };
+
+                fetch('https://demoweb-lemon.vercel.app/api/back', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Lưu thời gian ngắn thành công.');
+                    } else {
+                        alert('Đã xảy ra lỗi khi lưu thời gian ngắn.');
+                    }
+                });
+
                 isRunning = false;
                 controlButton.innerText = 'Bắt đầu';
-                controlButton.classList.remove('stop');
                 errorInput.style.display = 'block';
-                saveState();
             }
         });
 
         // Đăng xuất
         logoutButton.addEventListener('click', () => {
-            clearState();
             mainSection.style.display = 'none';
             loginSection.style.display = 'block';
         });
-
-        // Lưu lỗi
-        submitErrorButton.addEventListener('click', async () => {
-            const errorName = document.getElementById('error').value.trim();
-            if (!errorName) {
-                alert('Vui lòng nhập tên lỗi.');
-                return;
-            }
-
-            const vietnamStartTime = new Date(startTime.getTime() + 7 * 60 * 60 * 1000);
-            const endTime = new Date();
-            const vietnamEndTime = new Date(endTime.getTime() + 7 * 60 * 60 * 1000);
-
-            const data = {
-                username: VALID_CREDENTIALS.username,
-                ca: caInput.value,
-                startTime: vietnamStartTime.toISOString(),
-                endTime: vietnamEndTime.toISOString(),
-                error: errorName,
-                errorDuration: parseFloat(elapsedMinutes)
-            };
-
-            const response = await fetch('https://demoweb-lemon.vercel.app/api/back', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('Lưu dữ liệu thành công.');
-                errorInput.style.display = 'none';
-            } else {
-                alert('Đã xảy ra lỗi khi lưu.');
-            }
-        });
-
-        // Tải trạng thái khi trang tải
-        loadState();
     </script>
 </body>
 </html>
