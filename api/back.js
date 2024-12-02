@@ -4,6 +4,16 @@ const cors = require('cors');
 
 const app = express();
 
+// Thiết lập thời gian timeout
+const TIMEOUT = 60000;  // 60 giây, bạn có thể điều chỉnh theo nhu cầu
+app.use((req, res, next) => {
+  res.setTimeout(TIMEOUT, () => {
+    console.log('Request timed out');
+    res.status(504).send('Server timeout');
+  });
+  next();
+});
+
 // Cấu hình MongoDB
 const MONGO_URI = 'mongodb+srv://nhatnguyen20092002:Bb0zjBrxtfHVGwt5@mymongodbverceltest.y37g5.mongodb.net/mymongodbverceltest?retryWrites=true&w=majority&appName=mymongodbverceltest';
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
