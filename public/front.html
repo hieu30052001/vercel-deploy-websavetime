@@ -73,7 +73,7 @@
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
 
         const VALID_CREDENTIALS = {
-            username: 'A1' || 'A2',
+            usernames: ['A1', 'A2', 'A3', 'A4', 'A5'],
             password: '1234'
         };
 
@@ -144,7 +144,7 @@
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
-            if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+            if (VALID_CREDENTIALS.usernames.includes(username) && password === VALID_CREDENTIALS.password) {
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
