@@ -27,13 +27,27 @@
     <div id="mainSection" style="display: none;">
         <label for="ca">Tên Ca:</label>
         <input type="text" id="ca" placeholder="Nhập tên ca">
-        <button id="controlButton">Bắt đầu</button>
-        <button id="logoutButton">Đăng xuất</button>
+        <div>
+            <label for="timeMode">Chọn loại thời gian:</label>
+            <select id="timeMode">
+                <option value="short">Thời gian ngắn</option>
+                <option value="long">Thời gian dài</option>
+            </select>
+        </div>
+        <div id="shortTimeSection">
+            <button id="controlButton">Bắt đầu</button>
+        </div>
+        <div id="longTimeSection">
+            <label for="longTimeInput">Nhập thời gian (phút):</label>
+            <input type="number" id="longTimeInput" placeholder="Thời gian (phút)">
+            <button id="saveLongTimeButton">Lưu thời gian</button>
+        </div>
         <div id="errorInput">
             <label for="error">Tên lỗi:</label>
             <input type="text" id="error" placeholder="Nhập lỗi">
             <button id="submitError">Lưu</button>
         </div>
+        <button id="logoutButton">Đăng xuất</button>
         <div id="currentTime">Thời gian hiện tại: --:--:--</div>
     </div>
 
@@ -52,9 +66,14 @@
         const passwordInput = document.getElementById('password');
         const submitErrorButton = document.getElementById('submitError');
         const currentTimeDisplay = document.getElementById('currentTime');
+        const timeModeSelect = document.getElementById('timeMode');
+        const shortTimeSection = document.getElementById('shortTimeSection');
+        const longTimeSection = document.getElementById('longTimeSection');
+        const longTimeInput = document.getElementById('longTimeInput');
+        const saveLongTimeButton = document.getElementById('saveLongTimeButton');
 
         const VALID_CREDENTIALS = {
-            username: 'A1',
+            username: 'A1' || 'A2',
             password: '1234'
         };
 
@@ -66,6 +85,18 @@
             currentTimeDisplay.innerText = `Thời gian hiện tại: ${formattedTime}`;
         }
         setInterval(updateTime, 1000);
+
+        // Chọn chế độ thời gian
+        timeModeSelect.addEventListener('change', () => {
+            const mode = timeModeSelect.value;
+            if (mode === 'short') {
+                shortTimeSection.style.display = 'block';
+                longTimeSection.style.display = 'none';
+            } else {
+                shortTimeSection.style.display = 'none';
+                longTimeSection.style.display = 'block';
+            }
+        });
 
         // Lưu trạng thái vào localStorage
         function saveState() {
@@ -150,6 +181,21 @@
             }
         });
 
+        saveLongTimeButton.addEventListener('click', () => {
+            const ca = caInput.value.trim();
+            if (!ca) {
+                alert('Vui lòng nhập tên ca.');
+                return;
+            }
+
+            if (timeModeSelect.value === 'long') {
+                startTime = new Date();
+                elapsedMinutes = parseFloat(longTimeInput.value);
+                alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
+                errorInput.style.display = 'block';
+            }
+        });
+
         // Đăng xuất
         logoutButton.addEventListener('click', () => {
             clearState();
@@ -167,6 +213,11 @@
 
             const vietnamStartTime = new Date(startTime.getTime() + 7 * 60 * 60 * 1000);
             const endTime = new Date();
+            if (timeModeSelect.value === 'short') {
+                elapsedMinutes = ((endTime - startTime) / 1000 / 60).toFixed(2);
+            } else if (timeModeSelect.value === 'long') {
+                elapsedMinutes = parseFloat(longTimeInput.value);
+            }
             const vietnamEndTime = new Date(endTime.getTime() + 7 * 60 * 60 * 1000);
 
             const data = {

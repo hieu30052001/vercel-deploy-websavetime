@@ -106,3 +106,42 @@ button:active {
         padding: 20px;
     }
 }
+
+/* Short and Long Time Sections */
+#shortTimeSection, #longTimeSection {
+    margin-top: 15px;
+    padding: 10px 0;
+}
+
+#shortTimeSection button, #longTimeSection button {
+    background-color: #1E88E5;
+    color: white;
+}
+
+#shortTimeSection button:hover, #longTimeSection button:hover {
+    background-color: #1565C0;
+}
+
+#longTimeSection input[type="number"] {
+    text-align: right;
+}
+
+/* Dropdown */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%234CAF50' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px 16px;
+}
+
+/* Visual Feedback */
+input:invalid {
+    border-color: red;
+}
