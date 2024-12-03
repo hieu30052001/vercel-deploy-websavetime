@@ -73,7 +73,7 @@
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
 
         const VALID_CREDENTIALS = {
-            username: 'A1' || 'A2',
+            username: ['A1' , 'A2', 'A3','A4','A5'],
             password: '1234'
         };
 
@@ -148,6 +148,13 @@
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
+                if (mode === 'short') {
+                shortTimeSection.style.display = 'block';
+                longTimeSection.style.display = 'none';
+                } else {
+                shortTimeSection.style.display = 'none';
+                longTimeSection.style.display = 'block';
+                }
                 saveState();
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
