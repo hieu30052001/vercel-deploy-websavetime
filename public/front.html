@@ -144,7 +144,7 @@
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
-            if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+            if (VALID_CREDENTIALS.usernames.includes(username) && password === VALID_CREDENTIALS.password) {
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
