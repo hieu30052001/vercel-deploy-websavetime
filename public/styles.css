@@ -114,12 +114,12 @@ button:active {
 }
 
 #shortTimeSection button, #longTimeSection button {
-    background-color: #1E88E5;
+    background-color: #45a049;
     color: white;
 }
 
 #shortTimeSection button:hover, #longTimeSection button:hover {
-    background-color: #1565C0;
+    background-color: #45a049;
 }
 
 #longTimeSection input[type="number"] {
