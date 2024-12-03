@@ -148,13 +148,6 @@
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
-                if (mode === 'short') {
-                shortTimeSection.style.display = 'block';
-                longTimeSection.style.display = 'none';
-                } else {
-                shortTimeSection.style.display = 'none';
-                longTimeSection.style.display = 'block';
-                }
                 saveState();
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
