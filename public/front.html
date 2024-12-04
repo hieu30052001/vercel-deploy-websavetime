@@ -74,10 +74,14 @@
 
          // Tạo một đối tượng chứa nhiều tài khoản và mật khẩu
         const VALID_CREDENTIALS = [
-            { username: 'A1', password: '1234' },
-            { username: 'A2', password: '1234' },
-            { username: 'A3', password: '1234' },
-            { username: 'A4', password: '1234' }
+            { username: 'C17', password: '1234' },
+            { username: 'C18', password: '1234' },
+            { username: 'C19', password: '1234' },
+            { username: 'C20', password: '1234' },
+            { username: 'A21', password: '1234' },
+            { username: 'A22', password: '1234' },
+            { username: 'A23', password: '1234' },
+            { username: 'A24', password: '1234' }
         ];
 
 
@@ -175,7 +179,7 @@
                 startTime = new Date();
                 isRunning = true;
                 controlButton.innerText = 'Dừng';
-                controlButton.classList.add('stop');
+                controlButton.style.backgroundColor = 'red';
                 errorInput.style.display = 'none';
                 saveState();
             } else {
@@ -184,7 +188,7 @@
                 alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
                 isRunning = false;
                 controlButton.innerText = 'Bắt đầu';
-                controlButton.classList.remove('stop');
+                controlButton.style.backgroundColor = ''; // Quay lại màu mặc định
                 errorInput.style.display = 'block';
                 saveState();
             }
