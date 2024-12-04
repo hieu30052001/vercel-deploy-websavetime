@@ -100,6 +100,7 @@
             if (mode === 'short') {
                 shortTimeSection.style.display = 'block';
                 longTimeSection.style.display = 'none';
+                longTimeInput.value = "";
             } else {
                 shortTimeSection.style.display = 'none';
                 longTimeSection.style.display = 'block';
@@ -126,12 +127,23 @@
             const savedCa = localStorage.getItem('ca');
             const savedStartTime = localStorage.getItem('startTime');
             const running = localStorage.getItem('isRunning') === 'true';
+            const savedTimeMode = localStorage.getItem('timeMode') || 'short';
 
             if (isLoggedIn) {
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
                 usernameInput.value = savedUsername || '';
                 caInput.value = savedCa || '';
+
+                // Đặt giá trị cho chế độ thời gian
+                timeModeSelect.value = savedTimeMode;
+                if (savedTimeMode === 'short') {
+                    shortTimeSection.style.display = 'block';
+                    longTimeSection.style.display = 'none';
+                } else if (savedTimeMode === 'long') {
+                    shortTimeSection.style.display = 'none';
+                    longTimeSection.style.display = 'block';
+                }
 
                 if (running && savedStartTime) {
                     startTime = new Date(savedStartTime);
@@ -199,6 +211,10 @@
             if (!ca) {
                 alert('Vui lòng nhập tên ca.');
                 return;
+            }
+            if (!longTimeValue || longTimeValue <= 30) {
+            alert('Vui lòng nhập thời gian hợp lệ (hơn 30 phút).');
+            return;
             }
 
             if (timeModeSelect.value === 'long') {
