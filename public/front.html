@@ -72,10 +72,14 @@
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
 
-        const VALID_CREDENTIALS = {
-            username: 'A1',
-            password: '1234'
-        };
+         // Tạo một đối tượng chứa nhiều tài khoản và mật khẩu
+        const VALID_CREDENTIALS = [
+            { username: 'A1', password: '1234' },
+            { username: 'A2', password: '1234' },
+            { username: 'A3', password: '1234' },
+            { username: 'A4', password: '1234' }
+        ];
+
 
         // Cập nhật thời gian thực
         function updateTime() {
@@ -144,7 +148,11 @@
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
-            if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+            const validUser = VALID_CREDENTIALS.find(
+                cred => cred.username === username && cred.password === password
+            );
+
+            if (validUser) {
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
@@ -153,6 +161,7 @@
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
             }
         });
+
 
         // Bắt đầu/Dừng ca
         controlButton.addEventListener('click', () => {
@@ -221,7 +230,7 @@
             const vietnamEndTime = new Date(endTime.getTime() + 7 * 60 * 60 * 1000);
 
             const data = {
-                username: VALID_CREDENTIALS.username,
+                username: usernameInput.value,
                 ca: caInput.value,
                 startTime: vietnamStartTime.toISOString(),
                 endTime: vietnamEndTime.toISOString(),
