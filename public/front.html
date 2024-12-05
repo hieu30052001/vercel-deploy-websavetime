@@ -25,8 +25,11 @@
         <button id="loginButton">Đăng nhập</button>
     </div>
     <div id="mainSection" style="display: none;">
-        <label for="ca">Tên Ca:</label>
-        <input type="text" id="ca" placeholder="Nhập tên ca">
+        <label for="ca">Chọn Ca:</label>
+        <select id="ca">
+            <option value="A">Ca A</option>
+            <option value="B">Ca B</option>
+        </select>
         <div>
             <label for="timeMode">Chọn loại thời gian:</label>
             <select id="timeMode">
@@ -111,7 +114,7 @@
         function saveState() {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', usernameInput.value.trim());
-            localStorage.setItem('ca', caInput.value.trim());
+            localStorage.setItem('ca', caInput.value);
             if (isRunning && startTime) {
                 localStorage.setItem('isRunning', 'true');
                 localStorage.setItem('startTime', startTime);
@@ -191,7 +194,7 @@
 
         // Bắt đầu/Dừng ca
         controlButton.addEventListener('click', () => {
-            const ca = caInput.value.trim();
+            const ca = caInput.value;
             if (!ca) {
                 alert('Vui lòng nhập tên ca.');
                 return;
@@ -217,7 +220,7 @@
         });
 
         saveLongTimeButton.addEventListener('click', () => {
-            const ca = caInput.value.trim();
+            const ca = caInput.value;
             const longTimeValue = parseFloat(longTimeInput.value);
             if (!ca) {
                 alert('Vui lòng nhập tên ca.');

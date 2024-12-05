@@ -145,3 +145,26 @@ select {
 input:invalid {
     border-color: red;
 }
+
+select {
+    display: block;
+    width: 100%;
+    margin: 10px 0; /* Thêm khoảng cách giữa menu và các thành phần khác */
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    box-sizing: border-box; /* Đảm bảo kích thước không bị lỗi */
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+select:active, select:hover {
+    background-color: #f4f7fc; /* Làm nổi bật khi rê chuột hoặc bấm */
+}
