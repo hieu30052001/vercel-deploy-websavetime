@@ -97,10 +97,12 @@
                 caInput.value = 'Đêm';
                 caInput.innerHTML = '<option value="Đêm">Ca từ 19h-7h</option>';
             }
+            alert(`Giờ hiện tại là: ${hours} giờ`);
         }
 
         // Update shift on page load
         updateShift();
+
 
         // Auto update the shift every hour
         setInterval(updateShift, 60 * 60 * 1000); // 1 hour
