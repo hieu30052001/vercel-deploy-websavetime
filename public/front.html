@@ -86,9 +86,9 @@
 
 
         function updateShift() {
-            const now = new Date();
-            const vietnamTime = new Date(now.getTime() + 7 * 60 * 60 * 1000);
-            const hours = vietnamTime.getHours();
+            const now_ca = new Date();
+            const vietnamTime_ca = new Date(now_ca.getTime());
+            const hours = vietnamTime_ca.getHours();
             
             if (hours >= 7 && hours < 19) {
                 caInput.value = 'Ngày';
