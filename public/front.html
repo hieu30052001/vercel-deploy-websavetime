@@ -25,11 +25,8 @@
         <button id="loginButton">Đăng nhập</button>
     </div>
     <div id="mainSection" style="display: none;">
-        <label for="ca">Chọn Ca:</label>
-        <select id="ca">
-            <option value="A">Ca từ 7h-19h</option>
-            <option value="B">Ca từ 19h-7h</option>
-        </select>
+        <label for="ca">Ca:</label>
+        <select id="ca"></select>
         <div>
             <label for="timeMode">Chọn loại thời gian:</label>
             <select id="timeMode">
@@ -88,33 +85,25 @@
         ];
 
 
-        function updateShiftLabels() {
-            const caInput = document.getElementById('ca');
-            const now_cca = new Date();
-            const vietnamTime_cca = new Date(now_cca.getTime() + 7 * 60 * 60 * 1000);
-
-            const startOfWeek = new Date(vietnamTime_cca);
-            startOfWeek.setDate(vietnamTime_cca.getDate() - vietnamTime_cca.getDay() + 1);
-            const endOfWeek = new Date(vietnamTime_cca);
-            endOfWeek.setDate(vietnamTime_cca.getDate() - vietnamTime_cca.getDay() + 7);
-
-            const isEvenWeek = Math.ceil((vietnamTime_cca.getDate() - 1) / 7) % 2 === 0;
-
-            if (endOfWeek.getMonth() !== startOfWeek.getMonth()) {
-                // Đổi nhãn ca cho cuối tháng
-                caInput.options[0].text = "Ca từ 19h-7h (cuối tuần)";
-                caInput.options[1].text = "Ca 7h-19h (cuối tuần)";
-            } else if (isEvenWeek) {
-                // Đổi nhãn ca cho tuần chẵn
-                caInput.options[0].text = "Ca từ 19h-7h";
-                caInput.options[1].text = "Ca từ 7h-19h";
+        function updateShift() {
+            const now = new Date();
+            const vietnamTime = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+            const hours = vietnamTime.getHours();
+            
+            if (hours >= 7 && hours < 19) {
+                caInput.value = 'Ngày';
+                caInput.innerHTML = '<option value="Ngày">Ca từ 7h-19h</option>';
             } else {
-                // Đổi nhãn ca cho tuần lẻ
-                caInput.options[0].text = "Ca 7h-19h";
-                caInput.options[1].text = "Ca từ 19h-7h";
+                caInput.value = 'Đêm';
+                caInput.innerHTML = '<option value="Đêm">Ca từ 19h-7h</option>';
             }
         }
-        updateShiftLabels();
+
+        // Update shift on page load
+        updateShift();
+
+        // Auto update the shift every hour
+        setInterval(updateShift, 60 * 60 * 1000); // 1 hour
 
 
         // Cập nhật thời gian thực

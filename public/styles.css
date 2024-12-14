@@ -169,3 +169,15 @@ select:active, select:hover {
     background-color: #f4f7fc; /* Làm nổi bật khi rê chuột hoặc bấm */
 }
 
+#currentShift {
+    display: block; /* Đảm bảo hiển thị dưới dạng khối */
+    font-size: 16px;
+    font-weight: bold; /* In đậm để nhấn mạnh */
+    color: #4CAF50; /* Màu xanh lá phù hợp */
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #e8f5e9; /* Nền xanh nhạt cho nổi bật */
+    border: 1px solid #4CAF50; /* Viền đồng màu */
+    border-radius: 4px; /* Bo góc */
+    text-align: center; /* Căn giữa nội dung */
+}
