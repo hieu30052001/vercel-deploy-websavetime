@@ -139,6 +139,7 @@
 
         // Tải trạng thái từ localStorage
         function loadState() {
+            determineShift()
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const savedUsername = localStorage.getItem('username');
             const savedCa = localStorage.getItem('ca');
@@ -146,7 +147,7 @@
             const running = localStorage.getItem('isRunning') === 'true';
 
             if (isLoggedIn) {
-                determineShift()
+                
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
                 usernameInput.value = savedUsername || '';
