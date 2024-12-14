@@ -25,9 +25,11 @@
         <button id="loginButton">Đăng nhập</button>
     </div>
     <div id="mainSection" style="display: none;">
-        <label for="ca">Ca hiện tại:</label>
-        <span id="currentShift">Ca từ 7h-19h</span>
-        <input type="hidden" id="ca" value="Ngày">
+        <label for="ca">Chọn Ca:</label>
+        <select id="ca">
+            <option value="A">Ca từ 7h-19h</option>
+            <option value="B">Ca từ 19h-7h</option>
+        </select>
         <div>
             <label for="timeMode">Chọn loại thời gian:</label>
             <select id="timeMode">
@@ -72,7 +74,6 @@
         const longTimeSection = document.getElementById('longTimeSection');
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
-        const currentShiftDisplay = document.getElementById('currentShift');
 
          // Tạo một đối tượng chứa nhiều tài khoản và mật khẩu
         const VALID_CREDENTIALS = [
@@ -87,19 +88,33 @@
         ];
 
 
-        function determineShift() {
-            const now_ca = new Date();
-            const vietnamTime_ca = new Date(now_ca.getTime() + 7 * 60 * 60 * 1000);
-            const currentHour_ca = vietnamTime_ca.getHours();
-            alert(`Giờ hiện tại: ${currentHour_ca}`);
-            if (currentHour_ca >= 7 && currentHour_ca < 19) {
-                currentShiftDisplay.innerText = "Ca từ 7h-19h";
-                caInput.value = "Ngày";
+        function updateShiftLabels() {
+            const caInput = document.getElementById('ca');
+            const now_cca = new Date();
+            const vietnamTime_cca = new Date(now_cca.getTime() + 7 * 60 * 60 * 1000);
+
+            const startOfWeek = new Date(vietnamTime_cca);
+            startOfWeek.setDate(vietnamTime_cca.getDate() - vietnamTime_cca.getDay() + 1);
+            const endOfWeek = new Date(vietnamTime_cca);
+            endOfWeek.setDate(vietnamTime_cca.getDate() - vietnamTime_cca.getDay() + 7);
+
+            const isEvenWeek = Math.ceil((vietnamTime_cca.getDate() - 1) / 7) % 2 === 0;
+
+            if (endOfWeek.getMonth() !== startOfWeek.getMonth()) {
+                // Đổi nhãn ca cho cuối tháng
+                caInput.options[0].text = "Ca từ 19h-7h (cuối tuần)";
+                caInput.options[1].text = "Ca 7h-19h (cuối tuần)";
+            } else if (isEvenWeek) {
+                // Đổi nhãn ca cho tuần chẵn
+                caInput.options[0].text = "Ca từ 19h-7h";
+                caInput.options[1].text = "Ca từ 7h-19h";
             } else {
-                currentShiftDisplay.innerText = "Ca từ 19h-7h";
-                caInput.value = "Đêm";
+                // Đổi nhãn ca cho tuần lẻ
+                caInput.options[0].text = "Ca 7h-19h";
+                caInput.options[1].text = "Ca từ 19h-7h";
             }
         }
+        updateShiftLabels();
 
 
         // Cập nhật thời gian thực
@@ -139,7 +154,6 @@
 
         // Tải trạng thái từ localStorage
         function loadState() {
-            determineShift()
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const savedUsername = localStorage.getItem('username');
             const savedCa = localStorage.getItem('ca');
@@ -147,7 +161,6 @@
             const running = localStorage.getItem('isRunning') === 'true';
 
             if (isLoggedIn) {
-                
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
                 usernameInput.value = savedUsername || '';
@@ -191,7 +204,6 @@
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
-                determineShift()
                 saveState();
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
