@@ -91,7 +91,7 @@
             const now_ca = new Date();
             const vietnamTime_ca = new Date(now_ca.getTime() + 7 * 60 * 60 * 1000);
             const currentHour_ca = vietnamTime_ca.getHours();
-
+            alert(`Giờ hiện tại: ${currentHour_ca}`);
             if (currentHour_ca >= 7 && currentHour_ca < 19) {
                 currentShiftDisplay.innerText = "Ca từ 7h-19h";
                 caInput.value = "Ngày";
