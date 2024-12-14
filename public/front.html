@@ -146,6 +146,7 @@
             const running = localStorage.getItem('isRunning') === 'true';
 
             if (isLoggedIn) {
+                determineShift()
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
                 usernameInput.value = savedUsername || '';
