@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.0",
+    "msnodesqlv8": "^4.4.0",
+    "mssql": "^11.0.1",
+    "mysql": "^2.18.1",
+    "sqlite3": "^5.1.7"
+  }
+}

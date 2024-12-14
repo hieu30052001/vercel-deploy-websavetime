@@ -1,0 +1,170 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Để căn theo chiều dọc */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Chiều cao tối thiểu */
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 30px; /* Khoảng cách giữa tiêu đề và các phần */
+}
+
+/* Layout for Sections */
+#loginSection, #mainSection {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin-bottom: 20px; /* Khoảng cách giữa login và mainSection */
+}
+
+#mainSection {
+    display: none;
+}
+
+input[type="text"], input[type="password"], input[type="button"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button.stop {
+    background-color: red;
+    color: white;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:active {
+    background-color: #388e3c;
+}
+
+/* Error input section */
+#errorInput {
+    display: none;
+    margin-top: 20px;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #f5c6cb;
+}
+
+#errorInput input[type="text"] {
+    border: 1px solid #f5c6cb;
+}
+
+/* Time Display */
+#currentTime {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #444;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    #loginSection, #mainSection {
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+/* Short and Long Time Sections */
+#shortTimeSection, #longTimeSection {
+    margin-top: 15px;
+    padding: 10px 0;
+}
+
+#shortTimeSection button, #longTimeSection button {
+    background-color: #45a049;
+    color: white;
+}
+
+#shortTimeSection button:hover, #longTimeSection button:hover {
+    background-color: #45a049;
+}
+
+#longTimeSection input[type="number"] {
+    text-align: right;
+}
+
+/* Dropdown */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%234CAF50' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px 16px;
+}
+
+/* Visual Feedback */
+input:invalid {
+    border-color: red;
+}
+
+select {
+    display: block;
+    width: 100%;
+    margin: 10px 0; /* Thêm khoảng cách giữa menu và các thành phần khác */
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    box-sizing: border-box; /* Đảm bảo kích thước không bị lỗi */
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+select:active, select:hover {
+    background-color: #f4f7fc; /* Làm nổi bật khi rê chuột hoặc bấm */
+}
