@@ -168,3 +168,15 @@ select:focus {
 select:active, select:hover {
     background-color: #f4f7fc; /* Làm nổi bật khi rê chuột hoặc bấm */
 }
+
+#caDisplay {
+    font-size: 18px; /* Tăng kích thước chữ */
+    font-weight: bold; /* Làm đậm */
+    color: #4CAF50; /* Màu xanh lá */
+    padding: 5px 10px;
+    background-color: #f0f9f1; /* Màu nền nhạt để nổi bật */
+    border: 1px solid #4CAF50; /* Viền cùng màu chữ */
+    border-radius: 5px; /* Bo góc mềm mại */
+    display: inline-block; /* Để làm khung chữ */
+    margin-top: 10px; /* Tạo khoảng cách với các phần khác */
+}
