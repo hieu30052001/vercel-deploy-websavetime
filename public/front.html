@@ -268,9 +268,11 @@
 
         // Lưu lỗi
         submitErrorButton.addEventListener('click', async () => {
+            submitErrorButton.disabled = true; // Vô hiệu hóa nút
             const errorName = document.getElementById('error').value.trim();
             if (!errorName) {
                 alert('Vui lòng nhập tên lỗi.');
+                submitErrorButton.disabled = false; // Kích hoạt lại nút nếu lỗi
                 return;
             }
 
@@ -289,7 +291,7 @@
                 error: errorName,
                 errorDuration: parseFloat(elapsedMinutes)
             };
-
+            try {
             const response = await fetch('https://demoweb-lemon.vercel.app/api/back', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -301,6 +303,10 @@
                 errorInput.style.display = 'none';
             } else {
                 alert('Đã xảy ra lỗi khi lưu.');
+            }} catch (error) {
+                alert('Lỗi kết nối hoặc máy chủ.');
+            } finally {
+                submitErrorButton.disabled = false; // Kích hoạt lại nút sau khi hoàn tất
             }
         });
 
