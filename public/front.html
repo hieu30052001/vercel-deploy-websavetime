@@ -45,6 +45,7 @@
         <div id="errorInput">
             <label for="error">Tên lỗi:</label>
             <input type="text" id="error" placeholder="Nhập lỗi">
+            <div id="suggestions"></div>
             <button id="submitError">Lưu</button>
         </div>
         <button id="logoutButton">Đăng xuất</button>
@@ -71,6 +72,7 @@
         const longTimeSection = document.getElementById('longTimeSection');
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
+        const suggestionsContainer = document.getElementById('suggestions');
 
          // Tạo một đối tượng chứa nhiều tài khoản và mật khẩu
         const VALID_CREDENTIALS = [
@@ -83,6 +85,209 @@
             { username: 'A23', password: '1234' },
             { username: 'A24', password: '1234' }
         ];
+
+        // Mảng chứa gợi ý lỗi
+        const errorSuggestions = [
+            "So le màng",
+            "Màng Dày + Màng Mỏng",
+            "Tróc hình in",
+            "Màng bị lót hơi",
+            "Xướt màng",
+            "Bóng bị tam giác",
+            "Lem màu +lem hình in",
+            "Nặng nhẹ",
+            "Dư, hụt chiều dài hình in",
+            "Hụt + dư chiều rộng màng",
+            "Bong màng",
+            "Sọc màng",
+            "Bóng nước",
+            "Màng nổi hột",
+            "Giòn màng theo chiều MD+ TD",
+            "Bề mặt có các hạt màu đen",
+            "Chỉ số TD, MD không đạt",
+            "Chỉ số Dart drop không đạt",
+            "Moto thu cuộn bị hư - trục in hư",
+            "Senso bắt hình in bị lỗi",
+            "Bể bạc đạn lô",
+            "Đầu khuôn dơ",
+            "Gãy ốc",
+            "Xiếc ốc không chặt",
+            "Lô bị mòn",
+            "Xilanh, lô ép bị vẹt",
+            "Đứt dây curoa",
+            "Trầy, mẻ vít tải",
+            "Thay ti",
+            "Bạc đạn moto chính bị hư",
+            "Thay đầu khuôn",
+            "Thay đầu lò",
+            "Sang hàng",
+            "Hư cân định lượng",
+            "Tuột nhiệt + tuột hơi",
+            "Hư board nhiệt",
+            "Đứt dây điện trở",
+            "Đứt dây điện",
+            "Hư quạt giải nhiệt",
+            "Đứt cầu chì",
+            "Moto chính mất pha",
+            "Hư Corona",
+            "Đứt dây đầu lò",
+            "Chập điện",
+            "Xử lý Corona",
+            "Lắp giàn xếp 8 - thay đầu HĐ - Dời giàn in",
+            "Bảo trì điện",
+            "Cảo báo lỗi",
+            "Gãy ốc đầu lò",
+            "Hư motor trục in",
+            "Lỗi do trục in",
+            "Lỗi màu nguyên liệu",
+            "Lẫn lộn nguyên liệu",
+            "Lỗi do nguyên liệu - Tái sinh dơ",
+            "Thiếu nguyên liệu trộn (Ko có keo)",
+            "Nguyên liệu bị ẩm",
+            "Lỗi keo zin bị quá hạn",
+            "Thiếu nhân sự",
+            "Chạy bao ngoài",
+            "Thay vải bọc ty",
+            "Off máy do thiếu giàn in",
+            "Lên máy",
+            "Chỉnh dao",
+            "Gắn máy in + Corona",
+            "Đổi hàng súc máy",
+            "Thay đầu lò từ HD - LD + giàn in",
+            "Thay máng mực",
+            "Vệ sinh đầu lò",
+            "Lỗi sọc màng thay đầu",
+            "Thay ốc đầu lò",
+            "Thay cảo",
+            "Đi lại dây điện",
+            "Bảo dưỡng máy theo KH",
+            "Thay trục vít",
+            "Lên trục và ống đồng lên máy",
+            "Hư ben hơi",
+            "Cạo đầu lò",
+            "Hư CB nguồn",
+            "Thay khuôn",
+            "Kéo máy đầu tuần",
+            "Thay lưới",
+            "Thử keo",
+            "Chạy mẫu",
+            "Rửa máy",
+            "Đủ hàng",
+            "Thử mực",
+            "Thử keo đỏ tpp",
+            "Hư máy",
+            "Chưa xác định",
+            "Test màu",
+            "Hư kéo phụ",
+            "Hư thu cuộn",
+            "Máy hư",
+            "Vệ sinh đầu khuôn",
+            "Chờ keo",
+            "Hư hộp số cảo",
+            "Hư nhiệt",
+            "Hư nhiệt đầu",
+            "Hư lô thu cuộn",
+            "Trộn sai công thức",
+            "Tạm ngưng",
+            "Chờ nguyên liệu",
+            "Hư quạt gió",
+            "Máy rò điện",
+            "Chạy mẫu LD",
+            "Hư mô tơ cảo",
+            "Hư kéo trên",
+            "Xì bóng",
+            "Sửa dàn xếp",
+            "Cúp điện kéo máy",
+            "Khác màu",
+            "Keo ướt",
+            "Xì đầu lưới",
+            "Hư lô cao su",
+            "Hư xịt hương",
+            "Keo bóng nước",
+            "Chạy hàng hút ẩm",
+            "Xì đứt canh chỉnh lại máy",
+            "Hư động cơ chính",
+            "Keo lên hột",
+            "Keo đứt xì",
+            "Chờ kế hoạch",
+            "Hư lô kéo trên",
+            "Thay mực in và dung môi",
+            "Sọc đầu khuôn",
+            "Nhảy CB nhiệt nòng",
+            "Hư điện trở",
+            "Hư trục in",
+            "Keo không lên",
+            "Biến tần cảo báo lỗi",
+            "Hết nguyên liệu",
+            "Hư đường hơi",
+            "Canh chỉnh máy",
+            "Chờ nhiệt",
+            "Hư hút keo",
+            "Kéo máy",
+            "Đứt màng",
+            "Cạo vải",
+            "Thay bạc đạn",
+            "Thay lô",
+            "Hư máy in",
+            "Thay gạc mực",
+            "Hư lô kéo phụ",
+            "Lên hàng mới",
+            "Dừng máy",
+            "Chạy hàng bù",
+            "Xước trục in",
+            "Vệ sinh mâm gió",
+            "Làm ty cáng màng",
+            "Thay chén",
+            "Cháy dây pha motor đùn",
+            "Thay ống đồng",
+            "Lệch tâm máy",
+            "Thay dao xếp hông",
+            "Thay trục in",
+            "Hư nhông",
+            "Thay bánh răng đầu thu",
+            "Xước lô",
+            "Tăng sên thu cuộn",
+            "Thay lô thu cuộn",
+            "Hư đầu lưới"
+
+        ];
+
+        // Hiển thị gợi ý khi người dùng nhập
+        errorInput.addEventListener('input', () => {
+            const inputValue = errorInput.value.toLowerCase();
+            suggestionsContainer.innerHTML = '';
+
+            if (inputValue.trim() === '') {
+                suggestionsContainer.style.display = 'none';
+                return;
+            }
+
+            const filteredSuggestions = errorSuggestions.filter(error => 
+                error.toLowerCase().includes(inputValue)
+            );
+
+            if (filteredSuggestions.length > 0) {
+                filteredSuggestions.forEach(suggestion => {
+                    const suggestionElement = document.createElement('div');
+                    suggestionElement.textContent = suggestion;
+                    suggestionElement.addEventListener('click', () => {
+                        errorInput.value = suggestion;
+                        suggestionsContainer.style.display = 'none';
+                    });
+                    suggestionsContainer.appendChild(suggestionElement);
+                });
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        });
+
+        // Ẩn gợi ý khi người dùng nhấp ra ngoài
+        document.addEventListener('click', (e) => {
+            if (!errorInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                suggestionsContainer.style.display = 'none';
+            }
+        });
 
 
         function updateShift() {
