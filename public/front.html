@@ -72,7 +72,7 @@
         const longTimeSection = document.getElementById('longTimeSection');
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
-        const suggestionsContainer = document.getElementById('suggestions');
+        const suggestionsDiv = document.getElementById('suggestions');
 
          // Tạo một đối tượng chứa nhiều tài khoản và mật khẩu
         const VALID_CREDENTIALS = [
@@ -87,7 +87,7 @@
         ];
 
         // Mảng chứa gợi ý lỗi
-        const errorSuggestions = [
+        const suggestionsList = [
             "So le màng",
             "Màng Dày + Màng Mỏng",
             "Tróc hình in",
@@ -254,38 +254,34 @@
 
         // Hiển thị gợi ý khi người dùng nhập
         errorInput.addEventListener('input', () => {
-            const inputValue = errorInput.value.toLowerCase();
-            suggestionsContainer.innerHTML = '';
+            const query = errorInput.value.toLowerCase().trim();
+            suggestionsDiv.innerHTML = '';
 
-            if (inputValue.trim() === '') {
-                suggestionsContainer.style.display = 'none';
-                return;
-            }
+            if (query) {
+                const matchedSuggestions = suggestionsList.filter(item => item.toLowerCase().includes(query));
 
-            const filteredSuggestions = errorSuggestions.filter(error => 
-                error.toLowerCase().includes(inputValue)
-            );
-
-            if (filteredSuggestions.length > 0) {
-                filteredSuggestions.forEach(suggestion => {
-                    const suggestionElement = document.createElement('div');
-                    suggestionElement.textContent = suggestion;
-                    suggestionElement.addEventListener('click', () => {
-                        errorInput.value = suggestion;
-                        suggestionsContainer.style.display = 'none';
+                if (matchedSuggestions.length > 0) {
+                    suggestionsDiv.style.display = 'block';
+                    matchedSuggestions.forEach(suggestion => {
+                        const suggestionElement = document.createElement('div');
+                        suggestionElement.textContent = suggestion;
+                        suggestionElement.addEventListener('click', () => {
+                            errorInput.value = suggestion;
+                            suggestionsDiv.style.display = 'none';
+                        });
+                        suggestionsDiv.appendChild(suggestionElement);
                     });
-                    suggestionsContainer.appendChild(suggestionElement);
-                });
-                suggestionsContainer.style.display = 'block';
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
             } else {
-                suggestionsContainer.style.display = 'none';
+                suggestionsDiv.style.display = 'none';
             }
         });
 
-        // Ẩn gợi ý khi người dùng nhấp ra ngoài
-        document.addEventListener('click', (e) => {
-            if (!errorInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-                suggestionsContainer.style.display = 'none';
+        document.addEventListener('click', (event) => {
+            if (!suggestionsDiv.contains(event.target) && event.target !== errorInput) {
+                suggestionsDiv.style.display = 'none';
             }
         });
 
