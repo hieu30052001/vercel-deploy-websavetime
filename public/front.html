@@ -45,7 +45,7 @@
         <div id="errorInput">
             <label for="error">Tên lỗi:</label>
             <input type="text" id="error" placeholder="Nhập lỗi">
-            <div id="suggestions"></div>
+            <div id="suggestions" style="display: none;"></div>
             <button id="submitError">Lưu</button>
         </div>
         <button id="logoutButton">Đăng xuất</button>
@@ -258,18 +258,18 @@
             suggestionsDiv.innerHTML = '';
 
             if (query) {
-                const matchedSuggestions = suggestionsList.filter(item => item.toLowerCase().includes(query));
-
-                if (matchedSuggestions.length > 0) {
+                const filteredSuggestions = suggestionsList.filter(suggestion => suggestion.toLowerCase().includes(query));
+                if (filteredSuggestions.length > 0) {
                     suggestionsDiv.style.display = 'block';
-                    matchedSuggestions.forEach(suggestion => {
-                        const suggestionElement = document.createElement('div');
-                        suggestionElement.textContent = suggestion;
-                        suggestionElement.addEventListener('click', () => {
+                    filteredSuggestions.forEach(suggestion => {
+                        const suggestionDiv = document.createElement('div');
+                        suggestionDiv.textContent = suggestion;
+                        suggestionDiv.className = 'suggestion-item';
+                        suggestionDiv.addEventListener('click', () => {
                             errorInput.value = suggestion;
                             suggestionsDiv.style.display = 'none';
                         });
-                        suggestionsDiv.appendChild(suggestionElement);
+                        suggestionsDiv.appendChild(suggestionDiv);
                     });
                 } else {
                     suggestionsDiv.style.display = 'none';
