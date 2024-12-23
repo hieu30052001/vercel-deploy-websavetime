@@ -44,8 +44,7 @@
         </div>
         <div id="errorInput">
             <label for="error">Tên lỗi:</label>
-            <input type="text" id="error" placeholder="Nhập lỗi">
-            <div id="suggestions" style="display: none;"></div>
+            <input type="text" id="error" placeholder="Nhập lỗi" list="listOfError">
             <button id="submitError">Lưu</button>
         </div>
         <button id="logoutButton">Đăng xuất</button>
@@ -72,7 +71,7 @@
         const longTimeSection = document.getElementById('longTimeSection');
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
-        const suggestionsDiv = document.getElementById('suggestions');
+
 
          // Tạo một đối tượng chứa nhiều tài khoản và mật khẩu
         const VALID_CREDENTIALS = [
@@ -86,204 +85,169 @@
             { username: 'A24', password: '1234' }
         ];
 
-        // Mảng chứa gợi ý lỗi
-        const suggestionsList = [
-            "So le màng",
-            "Màng Dày + Màng Mỏng",
-            "Tróc hình in",
-            "Màng bị lót hơi",
-            "Xướt màng",
-            "Bóng bị tam giác",
-            "Lem màu +lem hình in",
-            "Nặng nhẹ",
-            "Dư, hụt chiều dài hình in",
-            "Hụt + dư chiều rộng màng",
-            "Bong màng",
-            "Sọc màng",
-            "Bóng nước",
-            "Màng nổi hột",
-            "Giòn màng theo chiều MD+ TD",
-            "Bề mặt có các hạt màu đen",
-            "Chỉ số TD, MD không đạt",
-            "Chỉ số Dart drop không đạt",
-            "Moto thu cuộn bị hư - trục in hư",
-            "Senso bắt hình in bị lỗi",
-            "Bể bạc đạn lô",
-            "Đầu khuôn dơ",
-            "Gãy ốc",
-            "Xiếc ốc không chặt",
-            "Lô bị mòn",
-            "Xilanh, lô ép bị vẹt",
-            "Đứt dây curoa",
-            "Trầy, mẻ vít tải",
-            "Thay ti",
-            "Bạc đạn moto chính bị hư",
-            "Thay đầu khuôn",
-            "Thay đầu lò",
-            "Sang hàng",
-            "Hư cân định lượng",
-            "Tuột nhiệt + tuột hơi",
-            "Hư board nhiệt",
-            "Đứt dây điện trở",
-            "Đứt dây điện",
-            "Hư quạt giải nhiệt",
-            "Đứt cầu chì",
-            "Moto chính mất pha",
-            "Hư Corona",
-            "Đứt dây đầu lò",
-            "Chập điện",
-            "Xử lý Corona",
-            "Lắp giàn xếp 8 - thay đầu HĐ - Dời giàn in",
-            "Bảo trì điện",
-            "Cảo báo lỗi",
-            "Gãy ốc đầu lò",
-            "Hư motor trục in",
-            "Lỗi do trục in",
-            "Lỗi màu nguyên liệu",
-            "Lẫn lộn nguyên liệu",
-            "Lỗi do nguyên liệu - Tái sinh dơ",
-            "Thiếu nguyên liệu trộn (Ko có keo)",
-            "Nguyên liệu bị ẩm",
-            "Lỗi keo zin bị quá hạn",
-            "Thiếu nhân sự",
-            "Chạy bao ngoài",
-            "Thay vải bọc ty",
-            "Off máy do thiếu giàn in",
-            "Lên máy",
-            "Chỉnh dao",
-            "Gắn máy in + Corona",
-            "Đổi hàng súc máy",
-            "Thay đầu lò từ HD - LD + giàn in",
-            "Thay máng mực",
-            "Vệ sinh đầu lò",
-            "Lỗi sọc màng thay đầu",
-            "Thay ốc đầu lò",
-            "Thay cảo",
-            "Đi lại dây điện",
-            "Bảo dưỡng máy theo KH",
-            "Thay trục vít",
-            "Lên trục và ống đồng lên máy",
-            "Hư ben hơi",
-            "Cạo đầu lò",
-            "Hư CB nguồn",
-            "Thay khuôn",
-            "Kéo máy đầu tuần",
-            "Thay lưới",
-            "Thử keo",
-            "Chạy mẫu",
-            "Rửa máy",
-            "Đủ hàng",
-            "Thử mực",
-            "Thử keo đỏ tpp",
-            "Hư máy",
-            "Chưa xác định",
-            "Test màu",
-            "Hư kéo phụ",
-            "Hư thu cuộn",
-            "Máy hư",
-            "Vệ sinh đầu khuôn",
-            "Chờ keo",
-            "Hư hộp số cảo",
-            "Hư nhiệt",
-            "Hư nhiệt đầu",
-            "Hư lô thu cuộn",
-            "Trộn sai công thức",
-            "Tạm ngưng",
-            "Chờ nguyên liệu",
-            "Hư quạt gió",
-            "Máy rò điện",
-            "Chạy mẫu LD",
-            "Hư mô tơ cảo",
-            "Hư kéo trên",
-            "Xì bóng",
-            "Sửa dàn xếp",
-            "Cúp điện kéo máy",
-            "Khác màu",
-            "Keo ướt",
-            "Xì đầu lưới",
-            "Hư lô cao su",
-            "Hư xịt hương",
-            "Keo bóng nước",
-            "Chạy hàng hút ẩm",
-            "Xì đứt canh chỉnh lại máy",
-            "Hư động cơ chính",
-            "Keo lên hột",
-            "Keo đứt xì",
-            "Chờ kế hoạch",
-            "Hư lô kéo trên",
-            "Thay mực in và dung môi",
-            "Sọc đầu khuôn",
-            "Nhảy CB nhiệt nòng",
-            "Hư điện trở",
-            "Hư trục in",
-            "Keo không lên",
-            "Biến tần cảo báo lỗi",
-            "Hết nguyên liệu",
-            "Hư đường hơi",
-            "Canh chỉnh máy",
-            "Chờ nhiệt",
-            "Hư hút keo",
-            "Kéo máy",
-            "Đứt màng",
-            "Cạo vải",
-            "Thay bạc đạn",
-            "Thay lô",
-            "Hư máy in",
-            "Thay gạc mực",
-            "Hư lô kéo phụ",
-            "Lên hàng mới",
-            "Dừng máy",
-            "Chạy hàng bù",
-            "Xước trục in",
-            "Vệ sinh mâm gió",
-            "Làm ty cáng màng",
-            "Thay chén",
-            "Cháy dây pha motor đùn",
-            "Thay ống đồng",
-            "Lệch tâm máy",
-            "Thay dao xếp hông",
-            "Thay trục in",
-            "Hư nhông",
-            "Thay bánh răng đầu thu",
-            "Xước lô",
-            "Tăng sên thu cuộn",
-            "Thay lô thu cuộn",
-            "Hư đầu lưới"
-
-        ];
-
-        // Hiển thị gợi ý khi người dùng nhập
-        errorInput.addEventListener('input', () => {
-            const query = errorInput.value.toLowerCase().trim();
-            suggestionsDiv.innerHTML = '';
-
-            if (query) {
-                const filteredSuggestions = suggestionsList.filter(suggestion => suggestion.toLowerCase().includes(query));
-                if (filteredSuggestions.length > 0) {
-                    suggestionsDiv.style.display = 'block';
-                    filteredSuggestions.forEach(suggestion => {
-                        const suggestionDiv = document.createElement('div');
-                        suggestionDiv.textContent = suggestion;
-                        suggestionDiv.className = 'suggestion-item';
-                        suggestionDiv.addEventListener('click', () => {
-                            errorInput.value = suggestion;
-                            suggestionsDiv.style.display = 'none';
-                        });
-                        suggestionsDiv.appendChild(suggestionDiv);
-                    });
-                } else {
-                    suggestionsDiv.style.display = 'none';
-                }
-            } else {
-                suggestionsDiv.style.display = 'none';
-            }
-        });
-
-        document.addEventListener('click', (event) => {
-            if (!suggestionsDiv.contains(event.target) && event.target !== errorInput) {
-                suggestionsDiv.style.display = 'none';
-            }
-        });
+        <datalist id="listOfError">
+        <option value="So le màng" />
+        <option value="Màng Dày + Màng Mỏng" />
+        <option value="Tróc hình in" />
+        <option value="Màng bị lót hơi" />
+        <option value="Xướt màng" />
+        <option value="Bóng bị tam giác" />
+        <option value="Lem màu +lem hình in" />
+        <option value="Nặng nhẹ" />
+        <option value="Dư, hụt chiều dài hình in" />
+        <option value="Hụt + dư chiều rộng màng" />
+        <option value="Bong màng" />
+        <option value="Sọc màng" />
+        <option value="Bóng nước" />
+        <option value="Màng nổi hột" />
+        <option value="Giòn màng theo chiều MD+ TD" />
+        <option value="Bề mặt có các hạt màu đen" />
+        <option value="Chỉ số TD, MD không đạt" />
+        <option value="Chỉ số Dart drop không đạt" />
+        <option value="Moto thu cuộn bị hư - trục in hư" />
+        <option value="Senso bắt hình in bị lỗi" />
+        <option value="Bể bạc đạn lô" />
+        <option value="Đầu khuôn dơ" />
+        <option value="Gãy ốc" />
+        <option value="Xiếc ốc không chặt" />
+        <option value="Lô bị mòn" />
+        <option value="Xilanh, lô ép bị vẹt" />
+        <option value="Đứt dây curoa" />
+        <option value="Trầy, mẻ vít tải" />
+        <option value="Thay ti" />
+        <option value="Bạc đạn moto chính bị hư" />
+        <option value="Thay đầu khuôn" />
+        <option value="Thay đầu lò" />
+        <option value="Sang hàng" />
+        <option value="Hư cân định lượng" />
+        <option value="Tuột nhiệt + tuột hơi" />
+        <option value="Hư board nhiệt" />
+        <option value="Đứt dây điện trở" />
+        <option value="Đứt dây điện" />
+        <option value="Hư quạt giải nhiệt" />
+        <option value="Đứt cầu chì" />
+        <option value="Moto chính mất pha" />
+        <option value="Hư Corona" />
+        <option value="Đứt dây đầu lò" />
+        <option value="Chập điện" />
+        <option value="Xử lý Corona" />
+        <option value="Lắp giàn xếp 8 - thay đầu HĐ - Dời giàn in" />
+        <option value="Bảo trì điện" />
+        <option value="Cảo báo lỗi" />
+        <option value="Gãy ốc đầu lò" />
+        <option value="Hư motor trục in" />
+        <option value="Lỗi do trục in" />
+        <option value="Lỗi màu nguyên liệu" />
+        <option value="Lẫn lộn nguyên liệu" />
+        <option value="Lỗi do nguyên liệu - Tái sinh dơ" />
+        <option value="Thiếu nguyên liệu trộn (Ko có keo)" />
+        <option value="Nguyên liệu bị ẩm" />
+        <option value="Lỗi keo zin bị quá hạn" />
+        <option value="Thiếu nhân sự" />
+        <option value="Chạy bao ngoài" />
+        <option value="Thay vải bọc ty" />
+        <option value="Off máy do thiếu giàn in" />
+        <option value="Lên máy" />
+        <option value="Chỉnh dao" />
+        <option value="Gắn máy in + Corona" />
+        <option value="Đổi hàng súc máy" />
+        <option value="Thay đầu lò từ HD - LD + giàn in" />
+        <option value="Thay máng mực" />
+        <option value="Vệ sinh đầu lò" />
+        <option value="Lỗi sọc màng thay đầu" />
+        <option value="Thay ốc đầu lò" />
+        <option value="Thay cảo" />
+        <option value="Đi lại dây điện" />
+        <option value="Bảo dưỡng máy theo KH" />
+        <option value="Thay trục vít" />
+        <option value="Lên trục và ống đồng lên máy" />
+        <option value="Hư ben hơi" />
+        <option value="Cạo đầu lò" />
+        <option value="Hư CB nguồn" />
+        <option value="Thay khuôn" />
+        <option value="Kéo máy đầu tuần" />
+        <option value="Thay lưới" />
+        <option value="Thử keo" />
+        <option value="Chạy mẫu" />
+        <option value="Rửa máy" />
+        <option value="Đủ hàng" />
+        <option value="Thử mực" />
+        <option value="Thử keo đỏ tpp" />
+        <option value="Hư máy" />
+        <option value="Chưa xác định" />
+        <option value="Test màu" />
+        <option value="Hư kéo phụ" />
+        <option value="Hư thu cuộn" />
+        <option value="Máy hư" />
+        <option value="Vệ sinh đầu khuôn" />
+        <option value="Chờ keo" />
+        <option value="Hư hộp số cảo" />
+        <option value="Hư nhiệt" />
+        <option value="Hư nhiệt đầu" />
+        <option value="Hư lô thu cuộn" />
+        <option value="Trộn sai công thức" />
+        <option value="Tạm ngưng" />
+        <option value="Chờ nguyên liệu" />
+        <option value="Hư quạt gió" />
+        <option value="Máy rò điện" />
+        <option value="Chạy mẫu LD" />
+        <option value="Hư mô tơ cảo" />
+        <option value="Hư kéo trên" />
+        <option value="Xì bóng" />
+        <option value="Sửa dàn xếp" />
+        <option value="Cúp điện kéo máy" />
+        <option value="Khác màu" />
+        <option value="Keo ướt" />
+        <option value="Xì đầu lưới" />
+        <option value="Hư lô cao su" />
+        <option value="Hư xịt hương" />
+        <option value="Keo bóng nước" />
+        <option value="Chạy hàng hút ẩm" />
+        <option value="Xì đứt canh chỉnh lại máy" />
+        <option value="Hư động cơ chính" />
+        <option value="Keo lên hột" />
+        <option value="Keo đứt xì" />
+        <option value="Chờ kế hoạch" />
+        <option value="Hư lô kéo trên" />
+        <option value="Thay mực in và dung môi" />
+        <option value="Sọc đầu khuôn" />
+        <option value="Nhảy CB nhiệt nòng" />
+        <option value="Hư điện trở" />
+        <option value="Hư trục in" />
+        <option value="Keo không lên" />
+        <option value="Biến tần cảo báo lỗi" />
+        <option value="Hết nguyên liệu" />
+        <option value="Hư đường hơi" />
+        <option value="Canh chỉnh máy" />
+        <option value="Chờ nhiệt" />
+        <option value="Hư hút keo" />
+        <option value="Kéo máy" />
+        <option value="Đứt màng" />
+        <option value="Cạo vải" />
+        <option value="Thay bạc đạn" />
+        <option value="Thay lô" />
+        <option value="Hư máy in" />
+        <option value="Thay gạc mực" />
+        <option value="Hư lô kéo phụ" />
+        <option value="Lên hàng mới" />
+        <option value="Dừng máy" />
+        <option value="Chạy hàng bù" />
+        <option value="Xước trục in" />
+        <option value="Vệ sinh mâm gió" />
+        <option value="Làm ty cáng màng" />
+        <option value="Thay chén" />
+        <option value="Cháy dây pha motor đùn" />
+        <option value="Thay ống đồng" />
+        <option value="Lệch tâm máy" />
+        <option value="Thay dao xếp hông" />
+        <option value="Thay trục in" />
+        <option value="Hư nhông" />
+        <option value="Thay bánh răng đầu thu" />
+        <option value="Xước lô" />
+        <option value="Tăng sên thu cuộn" />
+        <option value="Thay lô thu cuộn" />
+        <option value="Hư đầu lưới" />
+        </datalist>
 
 
         function updateShift() {
