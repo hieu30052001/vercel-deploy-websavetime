@@ -181,3 +181,23 @@ select:active, select:hover {
     border-radius: 4px; /* Bo góc */
     text-align: center; /* Căn giữa nội dung */
 }
+
+
+#suggestions { 
+    border: 1px solid #ccc; 
+    max-height: 100px; 
+    overflow-y: auto; 
+    display: none; 
+    position: absolute; 
+    background: white; 
+    z-index: 10; 
+}
+
+#suggestions div {
+    padding: 5px; 
+    cursor: pointer; 
+}
+
+#suggestions div:hover {
+    background-color: #f0f0f0;
+}
