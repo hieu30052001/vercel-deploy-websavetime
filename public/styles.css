@@ -221,3 +221,11 @@ button#logoutButton:hover {
 button#logoutButton:active {
     background-color: #9aac25; /* Màu tối hơn khi bấm */
 }
+
+#logo {
+    width: 150px; /* Chiều rộng của logo */
+    height: auto; /* Tự động điều chỉnh chiều cao theo chiều rộng */
+    display: block; /* Đảm bảo hiển thị dưới dạng khối */
+    margin: 0 auto; /* Căn giữa logo trên màn hình */
+    padding-top: 20px; /* Khoảng cách từ trên cùng của phần header */
+}
