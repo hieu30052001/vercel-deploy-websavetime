@@ -201,3 +201,23 @@ select:active, select:hover {
 #suggestions div:hover {
     background-color: #f0f0f0;
 }
+
+button#logoutButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #ced94f; /* Màu đỏ cho nút đăng xuất */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px; /* Khoảng cách với các nút khác */
+}
+
+button#logoutButton:hover {
+    background-color: #bec92c; /* Màu sáng hơn khi hover */
+}
+
+button#logoutButton:active {
+    background-color: #9aac25; /* Màu tối hơn khi bấm */
+}
