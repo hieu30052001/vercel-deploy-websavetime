@@ -229,3 +229,47 @@ button#logoutButton:active {
     margin: 0 auto; /* Căn giữa logo trên màn hình */
     padding-top: 20px; /* Khoảng cách từ trên cùng của phần header */
 }
+
+#longTimeSection {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff; /* Nền trắng cho vùng nhập */
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+    width: 350px; /* Đặt chiều rộng cố định */
+    display: flex;
+    flex-direction: column; /* Xếp theo cột */
+    align-items: center; /* Căn giữa nội dung */
+}
+
+#longTimeSection label {
+    font-weight: bold; /* Chữ đậm */
+    font-size: 16px; /* Kích thước chữ */
+    color: #333; /* Màu chữ */
+    margin-bottom: 10px; /* Khoảng cách dưới */
+    text-align: center; /* Căn giữa chữ */
+}
+
+#longTimeSection input[type="number"] {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    padding: 10px;
+    border: 1px solid #ddd; /* Viền màu xám */
+    border-radius: 4px;
+    box-sizing: border-box; /* Đảm bảo không lỗi kích thước */
+    font-size: 14px;
+    margin-bottom: 15px; /* Khoảng cách dưới */
+    text-align: right; /* Canh phải */
+}
+
+#longTimeSection input[type="number"]:focus {
+    outline: none;
+    border-color: #4CAF50; /* Viền xanh khi focus */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Hiệu ứng sáng */
+}
+
+.highlight-red {
+    font-weight: bold;
+    color: red;
+    margin-left: 5px; /* Khoảng cách giữa chữ chính và chữ B1, B2, B3 */
+    font-size: 14px; /* Kích thước chữ tùy chỉnh */
+}
