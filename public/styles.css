@@ -270,6 +270,6 @@ button#logoutButton:active {
 .highlight-red {
     font-weight: bold;
     color: red;
-    margin-left: 5px; /* Khoảng cách giữa chữ chính và chữ B1, B2, B3 */
+    margin-left: 10px; /* Khoảng cách giữa chữ chính và chữ B1, B2, B3 */
     font-size: 14px; /* Kích thước chữ tùy chỉnh */
 }
