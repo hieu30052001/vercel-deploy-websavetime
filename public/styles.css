@@ -236,7 +236,7 @@ button#logoutButton:active {
     background-color: #ffffff; /* Nền trắng cho vùng nhập */
     border-radius: 8px; /* Bo góc */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
-    width: 350px; /* Đặt chiều rộng cố định */
+    width: auto; /* Đặt chiều rộng cố định */
     display: flex;
     flex-direction: column; /* Xếp theo cột */
     align-items: center; /* Căn giữa nội dung */
@@ -251,7 +251,7 @@ button#logoutButton:active {
 }
 
 #longTimeSection input[type="number"] {
-    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    width: auto; /* Chiếm toàn bộ chiều rộng */
     padding: 10px;
     border: 1px solid #ddd; /* Viền màu xám */
     border-radius: 4px;
