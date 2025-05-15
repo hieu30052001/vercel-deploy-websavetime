@@ -679,7 +679,7 @@
                 
     </datalist>
     
-    <h1>Web Lưu Thời Gian</h1>
+       <h1>Web Lưu Thời Gian</h1>
     <div id="loginSection">
         <label for="username">Tên đăng nhập (tên máy):</label>
         <input type="text" id="username" placeholder="Nhập tên đăng nhập">
@@ -692,6 +692,10 @@
     <div id="mainSection" style="display: none;">
         <label for="ca"><span class="highlight-red">B1</span>Ca:</label>
         <select id="ca"></select>
+        <div>
+            <label for="machineName">Tên máy:</label>
+            <input type="text" id="machineName" placeholder="Nhập tên máy">
+        </div>
         <div>
             <label for="timeMode">Chọn loại thời gian:</label>
             <select id="timeMode">
@@ -737,8 +741,9 @@
         const longTimeSection = document.getElementById('longTimeSection');
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
+        const machineNameInput = document.getElementById('machineName'); // Thêm tham chiếu đến input tên máy
 
-         // Tạo một đối tượng chứa nhiều tài khoản và mật khẩu
+        // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
             { username: 'C17', password: '1234' },
             { username: 'C18', password: '1234' },
@@ -756,12 +761,11 @@
             { username: 'hieu', password: '1234' }
         ];
 
-
+        // Cập nhật ca
         function updateShift() {
             const now_ca = new Date();
             const vietnamTime_ca = new Date(now_ca.getTime());
             const hours = vietnamTime_ca.getHours();
-            
             if (hours >= 7 && hours < 19) {
                 caInput.value = 'Ngày';
                 caInput.innerHTML = '<option value="Ngày">Ca từ 7h-19h</option>';
@@ -769,16 +773,9 @@
                 caInput.value = 'Đêm';
                 caInput.innerHTML = '<option value="Đêm">Ca từ 19h-7h</option>';
             }
-            
         }
-
-        // Update shift on page load
         updateShift();
-
-
-        // Auto update the shift every hour
-        setInterval(updateShift, 60 * 60 * 1000); // 1 hour
-
+        setInterval(updateShift, 60 * 60 * 1000);
 
         // Cập nhật thời gian thực
         function updateTime() {
@@ -800,6 +797,7 @@
                 shortTimeSection.style.display = 'none';
                 longTimeSection.style.display = 'block';
             }
+            localStorage.setItem('timeMode', mode); // Lưu chế độ thời gian
         });
 
         // Lưu trạng thái vào localStorage
@@ -807,6 +805,7 @@
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', usernameInput.value.trim());
             localStorage.setItem('ca', caInput.value);
+            localStorage.setItem('machineName', machineNameInput.value.trim()); // Lưu tên máy
             if (isRunning && startTime) {
                 localStorage.setItem('isRunning', 'true');
                 localStorage.setItem('startTime', startTime);
@@ -820,6 +819,7 @@
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const savedUsername = localStorage.getItem('username');
             const savedCa = localStorage.getItem('ca');
+            const savedMachineName = localStorage.getItem('machineName'); // Tải tên máy
             const savedStartTime = localStorage.getItem('startTime');
             const running = localStorage.getItem('isRunning') === 'true';
 
@@ -828,8 +828,7 @@
                 mainSection.style.display = 'block';
                 usernameInput.value = savedUsername || '';
                 caInput.value = savedCa || '';
-
-                // Đặt giá trị cho chế độ thời gian
+                machineNameInput.value = savedMachineName || ''; // Khôi phục tên máy
                 const savedTimeMode = localStorage.getItem('timeMode') || 'short';
                 timeModeSelect.value = savedTimeMode;
                 if (savedTimeMode === 'short') {
@@ -839,7 +838,6 @@
                     shortTimeSection.style.display = 'none';
                     longTimeSection.style.display = 'block';
                 }
-
                 if (running && savedStartTime) {
                     startTime = new Date(savedStartTime);
                     isRunning = true;
@@ -858,11 +856,9 @@
         loginButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
-
             const validUser = VALID_CREDENTIALS.find(
                 cred => cred.username === username && cred.password === password
             );
-
             if (validUser) {
                 alert('Đăng nhập thành công!');
                 loginSection.style.display = 'none';
@@ -871,18 +867,16 @@
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
             }
-             // Đặt giá trị cho chế độ thời gian
-             const savedTimeMode = localStorage.getItem('timeMode') || 'short';
-                timeModeSelect.value = savedTimeMode;
-                if (savedTimeMode === 'short') {
-                    shortTimeSection.style.display = 'block';
-                    longTimeSection.style.display = 'none';
-                } else if (savedTimeMode === 'long') {
-                    shortTimeSection.style.display = 'none';
-                    longTimeSection.style.display = 'block';
-                }
+            const savedTimeMode = localStorage.getItem('timeMode') || 'short';
+            timeModeSelect.value = savedTimeMode;
+            if (savedTimeMode === 'short') {
+                shortTimeSection.style.display = 'block';
+                longTimeSection.style.display = 'none';
+            } else if (savedTimeMode === 'long') {
+                shortTimeSection.style.display = 'none';
+                longTimeSection.style.display = 'block';
+            }
         });
-
 
         // Bắt đầu/Dừng ca
         controlButton.addEventListener('click', () => {
@@ -891,7 +885,6 @@
                 alert('Vui lòng nhập tên ca.');
                 return;
             }
-
             if (!isRunning) {
                 startTime = new Date();
                 isRunning = true;
@@ -905,12 +898,13 @@
                 alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
                 isRunning = false;
                 controlButton.innerText = 'Bắt đầu';
-                controlButton.style.backgroundColor = ''; // Quay lại màu mặc định
+                controlButton.style.backgroundColor = '';
                 errorInput.style.display = 'block';
                 saveState();
             }
         });
 
+        // Lưu thời gian dài
         saveLongTimeButton.addEventListener('click', () => {
             const ca = caInput.value;
             const longTimeValue = parseFloat(longTimeInput.value);
@@ -918,11 +912,6 @@
                 alert('Vui lòng nhập tên ca.');
                 return;
             }
-            //if (!longTimeValue || longTimeValue < 30) {
-            //alert('Vui lòng nhập thời gian hợp lệ (hơn 30 phút).');
-            //return;
-            //}
-
             if (timeModeSelect.value === 'long') {
                 startTime = new Date();
                 elapsedMinutes = parseFloat(longTimeInput.value);
@@ -940,11 +929,17 @@
 
         // Lưu lỗi
         submitErrorButton.addEventListener('click', async () => {
-            submitErrorButton.disabled = true; // Vô hiệu hóa nút
+            submitErrorButton.disabled = true;
             const errorName = document.getElementById('error').value.trim();
+            const machineName = machineNameInput.value.trim(); // Lấy giá trị tên máy
             if (!errorName) {
                 alert('Vui lòng nhập tên lỗi.');
-                submitErrorButton.disabled = false; // Kích hoạt lại nút nếu lỗi
+                submitErrorButton.disabled = false;
+                return;
+            }
+            if (!machineName) {
+                alert('Vui lòng nhập tên máy.');
+                submitErrorButton.disabled = false;
                 return;
             }
 
@@ -958,27 +953,29 @@
             const data = {
                 username: usernameInput.value,
                 ca: caInput.value,
+                machineName: machineName, // Thêm tên máy vào dữ liệu gửi API
                 startTime: vietnamStartTime.toISOString(),
                 endTime: vietnamEndTime.toISOString(),
                 error: errorName,
                 errorDuration: parseFloat(elapsedMinutes)
             };
             try {
-            const response = await fetch('https://vercel-deploy-websavetime.vercel.app/api/back', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert('Lưu dữ liệu thành công.');
-                errorInput.style.display = 'none';
-            } else {
-                alert('Đã xảy ra lỗi khi lưu.');
-            }} catch (error) {
+                const response = await fetch('https://vercel-deploy-websavetime.vercel.app/api/back', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    alert('Lưu dữ liệu thành công.');
+                    errorInput.style.display = 'none';
+                    machineNameInput.value = machineName; // Giữ giá trị tên máy
+                } else {
+                    alert('Đã xảy ra lỗi khi lưu.');
+                }
+            } catch (error) {
                 alert('Lỗi kết nối hoặc máy chủ.');
             } finally {
-                submitErrorButton.disabled = false; // Kích hoạt lại nút sau khi hoàn tất
+                submitErrorButton.disabled = false;
             }
         });
 
