@@ -14,6 +14,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const logSchema = new mongoose.Schema({
   username: { type: String, required: true },
   ca: { type: String, required: true },
+  Máy: { type: String, required: true },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
   error: { type: String, required: true },
