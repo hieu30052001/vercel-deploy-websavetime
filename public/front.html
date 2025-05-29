@@ -716,7 +716,11 @@
             <input type="text" id="error" list="listOfError" placeholder="Nhập lỗi">
             <button id="submitError"><span class="highlight-red">B3</span>Lưu</button>
         </div>
-        
+        <div id="solution">
+            <label for="error"><span class="highlight-red">B2</span>hướng khắc phục:</label>
+            <input type="text" id="error" list="listOfError" placeholder="Nhập">
+            <button id="submitError"><span class="highlight-red">B3</span>Lưu</button>
+        </div>
         <div id="currentTime">Thời gian hiện tại: --:--:--</div>
         <button id="logoutButton">Đăng xuất</button>
     </div>
@@ -741,7 +745,8 @@
         const longTimeSection = document.getElementById('longTimeSection');
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
-        const machineNameInput = document.getElementById('machineName'); // Thêm tham chiếu đến input tên máy
+        const machineNameInput = document.getElementById('machineName'); 
+        const solutionInput = document.getElementById('solution');
 
         // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
@@ -931,9 +936,15 @@
         submitErrorButton.addEventListener('click', async () => {
             submitErrorButton.disabled = true;
             const errorName = document.getElementById('error').value.trim();
+            const solution = document.getElementById('solution').value.trim();
             const machineName = machineNameInput.value.trim(); // Lấy giá trị tên máy
             if (!errorName) {
                 alert('Vui lòng nhập tên lỗi.');
+                submitErrorButton.disabled = false;
+                return;
+            }
+              if (!solution) {
+                alert('vui lòng nhận hướng khắc phục.');
                 submitErrorButton.disabled = false;
                 return;
             }
