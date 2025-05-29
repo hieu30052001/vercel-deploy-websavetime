@@ -14,7 +14,7 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const logSchema = new mongoose.Schema({
   username: { type: String, required: true },
   ca: { type: String, required: true },
-  Máy: { type: String, required: true },
+ may: { type: String, required: true },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
   error: { type: String, required: true },
@@ -29,14 +29,14 @@ app.use(express.json());
 
 // API xử lý lưu dữ liệu
 app.post('/api/back', async (req, res) => {
-  const { username, ca, startTime, endTime, error, errorDuration } = req.body;
+  const { username, ca, may, startTime, endTime, error, errorDuration } = req.body;
 
   if (!username || !ca || !startTime || !endTime || !error || !errorDuration) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' });
   }
 
   try {
-    const newLog = new Log({ username, ca, startTime, endTime, error, errorDuration });
+    const newLog = new Log({ username, ca, may, startTime, endTime, error, errorDuration });
     await newLog.save();
     res.status(200).json({ message: 'Lưu dữ liệu thành công!' });
   } catch (err) {
