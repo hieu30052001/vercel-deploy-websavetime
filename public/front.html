@@ -698,40 +698,28 @@
             <label for="machineName">Tên máy:</label>
             <input type="text" id="machineName" placeholder="Nhập tên máy">
         </div>
-        <div>
-            <label for="timeMode">Chọn loại thời gian:</label>
-            <select id="timeMode">
-                <option value="short">Thời gian ngắn</option>
-                <option value="long">Thời gian dài</option>
-            </select>
-        </div>
-        <div id="shortTimeSection">
-            <button id="controlButton">Bắt đầu</button>
-        </div>
         <div id="longTimeSection">
-            <label for="longTimeInput">Nhập thời gian (phút):</label>
+            <label for="longTimeInput"><span class="highlight-red">B2</span>Nhập thời gian lỗi (phút):</label>
             <input type="number" id="longTimeInput" placeholder="Thời gian (phút)">
             <button id="saveLongTimeButton">Lưu thời gian</button>
         </div>
-        <div id="errorInput">
-            <label for="error"><span class="highlight-red">B2</span>Tên lỗi:</label>
+        <div id="errorInput" style="display: none;">
+            <label for="error"><span class="highlight-red">B3</span>Tên lỗi:</label>
             <input type="text" id="error" list="listOfError" placeholder="Nhập lỗi">
-            <label for="solution"><span class="highlight-red">B3</span>Hướng khắc phục:</label>
+            <label for="solution"><span class="highlight-red">B4</span>Hướng khắc phục:</label>
             <textarea id="solution" placeholder="Nhập hướng khắc phục"></textarea>
-            <button id="submitError"><span class="highlight-red">B4</span>Lưu</button>
+            <button id="submitError"><span class="highlight-red">B5</span>Lưu</button>
         </div>
         <div id="currentTime">Thời gian hiện tại: --:--:--</div>
         <button id="logoutButton">Đăng xuất</button>
     </div>
 
     <script>
-        let isRunning = false;
-        let startTime, elapsedMinutes;
+        let elapsedMinutes;
 
         const loginSection = document.getElementById('loginSection');
         const mainSection = document.getElementById('mainSection');
         const loginButton = document.getElementById('loginButton');
-        const controlButton = document.getElementById('controlButton');
         const logoutButton = document.getElementById('logoutButton');
         const errorInput = document.getElementById('errorInput');
         const usernameInput = document.getElementById('username');
@@ -739,9 +727,6 @@
         const passwordInput = document.getElementById('password');
         const submitErrorButton = document.getElementById('submitError');
         const currentTimeDisplay = document.getElementById('currentTime');
-        const timeModeSelect = document.getElementById('timeMode');
-        const shortTimeSection = document.getElementById('shortTimeSection');
-        const longTimeSection = document.getElementById('longTimeSection');
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
         const machineNameInput = document.getElementById('machineName');
@@ -780,32 +765,12 @@
         }
         setInterval(updateTime, 1000);
 
-        // Chọn chế độ thời gian
-        timeModeSelect.addEventListener('change', () => {
-            const mode = timeModeSelect.value;
-            if (mode === 'short') {
-                shortTimeSection.style.display = 'block';
-                longTimeSection.style.display = 'none';
-                longTimeInput.value = "";
-            } else {
-                shortTimeSection.style.display = 'none';
-                longTimeSection.style.display = 'block';
-            }
-            localStorage.setItem('timeMode', mode);
-        });
-
         // Lưu trạng thái vào localStorage
         function saveState() {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', usernameInput.value.trim());
             localStorage.setItem('ca', caInput.value);
             localStorage.setItem('machineName', machineNameInput.value.trim());
-            if (isRunning && startTime) {
-                localStorage.setItem('isRunning', 'true');
-                localStorage.setItem('startTime', startTime);
-            } else {
-                localStorage.setItem('isRunning', 'false');
-            }
         }
 
         // Tải trạng thái từ localStorage
@@ -814,30 +779,13 @@
             const savedUsername = localStorage.getItem('username');
             const savedCa = localStorage.getItem('ca');
             const savedMachineName = localStorage.getItem('machineName');
-            const savedStartTime = localStorage.getItem('startTime');
-            const running = localStorage.getItem('isRunning') === 'true';
 
             if (isLoggedIn) {
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
                 usernameInput.value = savedUsername || '';
-                caInput.value = savedCa || 'A'; // Mặc định ca A nếu không có giá trị lưu
+                caInput.value = savedCa || 'A';
                 machineNameInput.value = savedMachineName || '';
-                const savedTimeMode = localStorage.getItem('timeMode') || 'short';
-                timeModeSelect.value = savedTimeMode;
-                if (savedTimeMode === 'short') {
-                    shortTimeSection.style.display = 'block';
-                    longTimeSection.style.display = 'none';
-                } else if (savedTimeMode === 'long') {
-                    shortTimeSection.style.display = 'none';
-                    longTimeSection.style.display = 'block';
-                }
-                if (running && savedStartTime) {
-                    startTime = new Date(savedStartTime);
-                    isRunning = true;
-                    controlButton.innerText = 'Dừng';
-                    errorInput.style.display = 'none';
-                }
             }
         }
 
@@ -861,41 +809,6 @@
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
             }
-            const savedTimeMode = localStorage.getItem('timeMode') || 'short';
-            timeModeSelect.value = savedTimeMode;
-            if (savedTimeMode === 'short') {
-                shortTimeSection.style.display = 'block';
-                longTimeSection.style.display = 'none';
-            } else if (savedTimeMode === 'long') {
-                shortTimeSection.style.display = 'none';
-                longTimeSection.style.display = 'block';
-            }
-        });
-
-        // Bắt đầu/Dừng ca
-        controlButton.addEventListener('click', () => {
-            const ca = caInput.value;
-            if (!ca) {
-                alert('Vui lòng chọn ca.');
-                return;
-            }
-            if (!isRunning) {
-                startTime = new Date();
-                isRunning = true;
-                controlButton.innerText = 'Dừng';
-                controlButton.style.backgroundColor = 'red';
-                errorInput.style.display = 'none';
-                saveState();
-            } else {
-                const endTime = new Date();
-                elapsedMinutes = ((endTime - startTime) / 1000 / 60).toFixed(2);
-                alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
-                isRunning = false;
-                controlButton.innerText = 'Bắt đầu';
-                controlButton.style.backgroundColor = '';
-                errorInput.style.display = 'block';
-                saveState();
-            }
         });
 
         // Lưu thời gian dài
@@ -906,12 +819,14 @@
                 alert('Vui lòng chọn ca.');
                 return;
             }
-            if (timeModeSelect.value === 'long') {
-                startTime = new Date();
-                elapsedMinutes = parseFloat(longTimeInput.value);
-                alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
-                errorInput.style.display = 'block';
+            if (!longTimeValue || longTimeValue <= 0) {
+                alert('Vui lòng nhập thời gian lỗi hợp lệ (phút).');
+                return;
             }
+            elapsedMinutes = longTimeValue;
+            alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
+            errorInput.style.display = 'block';
+            saveState();
         });
 
         // Đăng xuất
@@ -942,13 +857,14 @@
                 submitErrorButton.disabled = false;
                 return;
             }
-
-            const vietnamStartTime = new Date(startTime.getTime() + 7 * 60 * 60 * 1000);
-            const endTime = new Date();
-            if (timeModeSelect.value === 'long') {
-                elapsedMinutes = parseFloat(longTimeInput.value);
+            if (!elapsedMinutes) {
+                alert('Vui lòng lưu thời gian lỗi trước khi lưu lỗi.');
+                submitErrorButton.disabled = false;
+                return;
             }
-            const vietnamEndTime = new Date(endTime.getTime() + 7 * 60 * 60 * 1000);
+
+            const vietnamStartTime = new Date();
+            const vietnamEndTime = new Date(vietnamStartTime.getTime() + elapsedMinutes * 60 * 1000);
 
             const data = {
                 username: usernameInput.value,
@@ -970,7 +886,9 @@
                     alert('Lưu dữ liệu thành công.');
                     errorInput.style.display = 'none';
                     machineNameInput.value = machineName;
+                    longTimeInput.value = '';
                     solutionInput.value = '';
+                    elapsedMinutes = null;
                 } else {
                     alert('Đã xảy ra lỗi khi lưu.');
                 }
