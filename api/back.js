@@ -1,10 +1,11 @@
+```javascript
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
 
-// Cấu hình MongoDB (Thay `YOUR_MONGODB_URI` bằng URI MongoDB của bạn)
+// Cấu hình MongoDB
 const MONGO_URI = 'mongodb+srv://koconik111:glhAYPHZa6XD8DP1@cluster0.hwbp9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Kết nối MongoDB thành công!'))
@@ -18,7 +19,8 @@ const logSchema = new mongoose.Schema({
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
   error: { type: String, required: true },
-  errorDuration: { type: Number, required: true }
+  errorDuration: { type: Number, required: true },
+  solution: { type: String, required: false } // Thêm trường solution, không bắt buộc
 });
 
 const Log = mongoose.model('Log', logSchema);
@@ -29,14 +31,15 @@ app.use(express.json());
 
 // API xử lý lưu dữ liệu
 app.post('/api/back', async (req, res) => {
-  const { username, ca, machineName, startTime, endTime, error, errorDuration } = req.body;
+  const { username, ca, machineName, startTime, endTime, error, errorDuration, solution } = req.body;
 
+  // Kiểm tra các trường bắt buộc
   if (!username || !ca || !machineName || !startTime || !endTime || !error || !errorDuration) {
-    return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' });
+    return res.status(400).json({ error: 'Dữ liệu không hợp lệ. Vui lòng cung cấp đầy đủ các trường bắt buộc.' });
   }
 
   try {
-    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration });
+    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration, solution });
     await newLog.save();
     res.status(200).json({ message: 'Lưu dữ liệu thành công!' });
   } catch (err) {
@@ -52,3 +55,4 @@ app.use((req, res) => {
 
 // Export server cho Vercel
 module.exports = app;
+```
