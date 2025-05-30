@@ -931,7 +931,6 @@
         submitErrorButton.addEventListener('click', async () => {
             submitErrorButton.disabled = true;
             const errorName = document.getElementById('error').value.trim();
-            const machineName = machineNameInput.value.trim();
             const machineName = machineNameInput.value.trim(); // Lấy giá trị tên máy
             if (!errorName) {
                 alert('Vui lòng nhập tên lỗi.');
