@@ -715,11 +715,7 @@
             <label for="error"><span class="highlight-red">B2</span>Tên lỗi:</label>
             <input type="text" id="error" list="listOfError" placeholder="Nhập lỗi">
             <button id="submitError"><span class="highlight-red">B3</span>Lưu</button>
-        </div>
-        <div id="solutionInput">
-            <label for="solutionName"></span>hướng khắc phục:</label>
-            <input type="text" id="solutionName"  placeholder="Nhập">
-         
+
         </div>
         <div id="currentTime">Thời gian hiện tại: --:--:--</div>
         <button id="logoutButton">Đăng xuất</button>
@@ -746,8 +742,7 @@
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
         const machineNameInput = document.getElementById('machineName'); 
-        const solutionInput = document.getElementById('solutionName');
-
+   
         // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
             { username: 'C17', password: '1234' },
@@ -940,11 +935,6 @@
             const machineName = machineNameInput.value.trim(); // Lấy giá trị tên máy
             if (!errorName) {
                 alert('Vui lòng nhập tên lỗi.');
-                submitErrorButton.disabled = false;
-                return;
-            }
-              if (!solutionName) {
-                alert('Vui lòng nhận hướng khắc phục.');
                 submitErrorButton.disabled = false;
                 return;
             }
