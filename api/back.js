@@ -18,7 +18,6 @@ const logSchema = new mongoose.Schema({
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
   error: { type: String, required: true },
-  solutionName: { type: String, required: true },
   errorDuration: { type: Number, required: true }
 });
 
@@ -30,14 +29,14 @@ app.use(express.json());
 
 // API xử lý lưu dữ liệu
 app.post('/api/back', async (req, res) => {
-  const { username, ca, machineName, solutionName, startTime, endTime, error, errorDuration } = req.body;
+  const { username, ca, machineName, startTime, endTime, error, errorDuration } = req.body;
 
-  if (!username || !ca || !machineName || !solutionName || !startTime || !endTime || !error || !errorDuration) {
+  if (!username || !ca || !machineName || !startTime || !endTime || !error || !errorDuration) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' });
   }
 
   try {
-    const newLog = new Log({ username, ca, machineName, solutionName, startTime, endTime, error, errorDuration });
+    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration });
     await newLog.save();
     res.status(200).json({ message: 'Lưu dữ liệu thành công!' });
   } catch (err) {
