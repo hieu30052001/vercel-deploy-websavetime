@@ -690,7 +690,10 @@
     </div>
     <div id="mainSection" style="display: none;">
         <label for="ca"><span class="highlight-red">B1</span>Ca:</label>
-        <select id="ca"></select>
+        <select id="ca">
+            <option value="A">Ca A</option>
+            <option value="B">Ca B</option>
+        </select>
         <div>
             <label for="machineName">Tên máy:</label>
             <input type="text" id="machineName" placeholder="Nhập tên máy">
@@ -742,7 +745,7 @@
         const longTimeInput = document.getElementById('longTimeInput');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
         const machineNameInput = document.getElementById('machineName');
-        const solutionInput = document.getElementById('solution'); // Thêm biến cho trường hướng khắc phục
+        const solutionInput = document.getElementById('solution');
 
         // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
@@ -762,21 +765,11 @@
             { username: 'hieu', password: '1234' }
         ];
 
-        // Cập nhật ca
+        // Khởi tạo ca
         function updateShift() {
-            const now_ca = new Date();
-            const vietnamTime_ca = new Date(now_ca.getTime());
-            const hours = vietnamTime_ca.getHours();
-            if (hours >= 7 && hours < 19) {
-                caInput.value = 'Ngày';
-                caInput.innerHTML = '<option value="Ngày">Ca từ 7h-19h</option>';
-            } else {
-                caInput.value = 'Đêm';
-                caInput.innerHTML = '<option value="Đêm">Ca từ 19h-7h</option>';
-            }
+            caInput.value = 'A'; // Mặc định chọn ca A
         }
         updateShift();
-        setInterval(updateShift, 60 * 60 * 1000);
 
         // Cập nhật thời gian thực
         function updateTime() {
@@ -828,7 +821,7 @@
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
                 usernameInput.value = savedUsername || '';
-                caInput.value = savedCa || '';
+                caInput.value = savedCa || 'A'; // Mặc định ca A nếu không có giá trị lưu
                 machineNameInput.value = savedMachineName || '';
                 const savedTimeMode = localStorage.getItem('timeMode') || 'short';
                 timeModeSelect.value = savedTimeMode;
@@ -883,7 +876,7 @@
         controlButton.addEventListener('click', () => {
             const ca = caInput.value;
             if (!ca) {
-                alert('Vui lòng nhập tên ca.');
+                alert('Vui lòng chọn ca.');
                 return;
             }
             if (!isRunning) {
@@ -910,7 +903,7 @@
             const ca = caInput.value;
             const longTimeValue = parseFloat(longTimeInput.value);
             if (!ca) {
-                alert('Vui lòng nhập tên ca.');
+                alert('Vui lòng chọn ca.');
                 return;
             }
             if (timeModeSelect.value === 'long') {
@@ -933,7 +926,7 @@
             submitErrorButton.disabled = true;
             const errorName = document.getElementById('error').value.trim();
             const machineName = machineNameInput.value.trim();
-            const solution = solutionInput.value.trim(); // Lấy giá trị hướng khắc phục
+            const solution = solutionInput.value.trim();
             if (!errorName) {
                 alert('Vui lòng nhập tên lỗi.');
                 submitErrorButton.disabled = false;
@@ -965,7 +958,7 @@
                 endTime: vietnamEndTime.toISOString(),
                 error: errorName,
                 errorDuration: parseFloat(elapsedMinutes),
-                solution: solution // Thêm hướng khắc phục vào dữ liệu
+                solution: solution
             };
             try {
                 const response = await fetch('https://vercel-deploy-websavetime.vercel.app/api/back', {
@@ -977,7 +970,7 @@
                     alert('Lưu dữ liệu thành công.');
                     errorInput.style.display = 'none';
                     machineNameInput.value = machineName;
-                    solutionInput.value = ''; // Xóa trường hướng khắc phục sau khi lưu
+                    solutionInput.value = '';
                 } else {
                     alert('Đã xảy ra lỗi khi lưu.');
                 }
