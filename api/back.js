@@ -38,7 +38,7 @@ app.post('/api/back', async (req, res) => {
   }
 
   try {
-    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration, solution});
+    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration, solution });
     await newLog.save();
     res.status(200).json({ message: 'Lưu dữ liệu thành công!' });
   } catch (err) {
@@ -54,4 +54,3 @@ app.use((req, res) => {
 
 // Export server cho Vercel
 module.exports = app;
-```
