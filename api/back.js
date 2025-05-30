@@ -1,11 +1,10 @@
-```javascript
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
 
-// Cấu hình MongoDB
+// Cấu hình MongoDB (Thay `YOUR_MONGODB_URI` bằng URI MongoDB của bạn)
 const MONGO_URI = 'mongodb+srv://koconik111:glhAYPHZa6XD8DP1@cluster0.hwbp9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Kết nối MongoDB thành công!'))
@@ -39,7 +38,7 @@ app.post('/api/back', async (req, res) => {
   }
 
   try {
-    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration, solution });
+    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration, solution});
     await newLog.save();
     res.status(200).json({ message: 'Lưu dữ liệu thành công!' });
   } catch (err) {
