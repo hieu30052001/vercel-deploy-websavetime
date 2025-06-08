@@ -1,86 +1,56 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
 
 const app = express();
 
-// MongoDB Connection
-const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://koconik111:glhAYPHZa6XD8DP1@cluster0.hwbp9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-mongoose.connect(MONGO_URI)
+// Cấu hình MongoDB (Thay `YOUR_MONGODB_URI` bằng URI MongoDB của bạn)
+const MONGO_URI = 'mongodb+srv://koconik111:glhAYPHZa6XD8DP1@cluster0.hwbp9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Kết nối MongoDB thành công!'))
   .catch(err => console.error('Lỗi kết nối MongoDB:', err));
 
-// Log Schema with Additional Validation
+// Tạo Schema và Model cho MongoDB
 const logSchema = new mongoose.Schema({
-  username: { type: String, required: true, trim: true },
-  ca: { type: String, required: true, trim: true },
-  machineName: { type: String, required: true, trim: true },
+  username: { type: String, required: true },
+  ca: { type: String, required: true },
+  machineName: { type: String, required: true },
   startTime: { type: Date, required: true },
-  endTime: { 
-    type: Date, 
-    required: true,
-    validate: {
-      validator: function(endTime) {
-        return endTime >= this.startTime;
-      },
-      message: 'endTime must be after startTime'
-    }
-  },
-  error: { type: String, required: true, trim: true },
-  errorDuration: { 
-    type: Number, 
-    required: true, 
-    min: [0, 'errorDuration must be non-negative'] 
-  },
-  solution: { type: String, trim: true },
-  errorType: { 
-    type: String, 
-    required: true, 
-    enum: ['CM', 'HT', 'PM', 'IM', '5S', 'COT', 'RM'],
-    trim: true 
-  }
+  endTime: { type: Date, required: true },
+  error: { type: String, required: true },
+  errorDuration: { type: Number, required: true },
+  solution: { type: String, required: false } // Thêm trường solution, không bắt buộc
 });
 
 const Log = mongoose.model('Log', logSchema);
 
 // Middleware
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+app.use(cors());
 app.use(express.json());
 
-// POST Endpoint
+// API xử lý lưu dữ liệu
 app.post('/api/back', async (req, res) => {
-  const { username, ca, machineName, startTime, endTime, error, errorDuration, solution, errorType } = req.body;
+  const { username, ca, machineName, startTime, endTime, error, errorDuration, solution } = req.body;
 
-  // Validate required fields
-  if (!username || !ca || !machineName || !startTime || !endTime || !error || errorDuration == null || !errorType) {
+  // Kiểm tra các trường bắt buộc
+  if (!username || !ca || !machineName || !startTime || !endTime || !error || !errorDuration) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ. Vui lòng cung cấp đầy đủ các trường bắt buộc.' });
   }
 
   try {
-    const newLog = new Log({ 
-      username, 
-      ca, 
-      machineName, 
-      startTime: new Date(startTime),
-      endTime: new Date(endTime), 
-      error, 
-      errorDuration, 
-      solution,
-      errorType
-    });
+    const newLog = new Log({ username, ca, machineName, startTime, endTime, error, errorDuration, solution });
     await newLog.save();
-    res.status(201).json({ message: 'Lưu dữ liệu thành công!' });
+    res.status(200).json({ message: 'Lưu dữ liệu thành công!' });
   } catch (err) {
     console.error('Lỗi khi lưu dữ liệu:', err.message);
     res.status(500).json({ error: 'Lỗi khi lưu dữ liệu.' });
   }
 });
 
-// 404 Handler
+// Xử lý endpoint không hợp lệ
 app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint không hợp lệ.' });
 });
 
-// Export for Vercel
+// Export server cho Vercel
 module.exports = app;
