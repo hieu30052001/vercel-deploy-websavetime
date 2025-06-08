@@ -5,11 +5,31 @@ require('dotenv').config();
 
 const app = express();
 
-// MongoDB Connection
+// MongoDB Connection with retry logic
 const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://koconik111:glhAYPHZa6XD8DP1@cluster0.hwbp9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('Kết nối MongoDB thành công!'))
-  .catch(err => console.error('Lỗi kết nối MongoDB:', err));
+
+async function connectMongoDB() {
+  let retries = 5;
+  while (retries > 0) {
+    try {
+      await mongoose.connect(MONGO_URI, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 10000,
+      });
+      console.log('Kết nối MongoDB thành công!');
+      return;
+    } catch (err) {
+      console.error('Lỗi kết nối MongoDB:', err.message);
+      retries -= 1;
+      if (retries === 0) {
+        console.error('Hết số lần thử kết nối MongoDB.');
+        process.exit(1);
+      }
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+  }
+}
+connectMongoDB();
 
 // Log Schema with Additional Validation
 const logSchema = new mongoose.Schema({
@@ -36,6 +56,7 @@ const logSchema = new mongoose.Schema({
   solution: { type: String, trim: true },
   errorType: { 
     type: String, 
+    required: true, 
     enum: ['CM', 'HT', 'PM', 'IM', '5S', 'COT', 'RM'],
     trim: true 
   }
@@ -52,7 +73,7 @@ app.post('/api/back', async (req, res) => {
   const { username, ca, machineName, startTime, endTime, error, errorDuration, solution, errorType } = req.body;
 
   // Validate required fields
-  if (!username || !ca || !machineName || !startTime || !endTime || !error || errorDuration == null) {
+  if (!username || !ca || !machineName || !startTime || !endTime || !error || errorDuration == null || !errorType) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ. Vui lòng cung cấp đầy đủ các trường bắt buộc.' });
   }
 
