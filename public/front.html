@@ -12,14 +12,6 @@
         button { margin: 10px 0; padding: 10px 20px; }
         #currentTime { margin-top: 20px; font-weight: bold; }
         textarea { width: 100%; height: 80px; margin-top: 5px; }
-        #historySection { margin-top: 20px; }
-        #historyTable { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        #historyTable th, #historyTable td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        #historyTable th { background-color: #f2f2f2; }
-        #historyTable tr:nth-child(even) { background-color: #f9f9f9; }
-        #historyTable tr:hover { background-color: #f5f5f5; }
-        .deleteButton { background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; }
-        .deleteButton:hover { background-color: #cc0000; }
     </style>
 </head>
 <body>
@@ -31,7 +23,659 @@
         <option value="Sọc màng">
         <option value="Màng Dày + Màng Mỏng">
         <option value="Tróc hình in">
-        <!-- Các option khác giữ nguyên như mã gốc, không lặp lại để tiết kiệm không gian -->
+        <option value="Màng bị lót hơi">
+        <option value="Xướt màng">
+        <option value="Bóng bị tam giác">
+        <option value="Lem màu +lem hình in">
+        <option value="Nặng nhẹ">
+        <option value="Dư, hụt chiều dài hình in">
+        <option value="Hụt + dư chiều rộng màng">
+        <option value="Bong màng">
+        <option value="Sọc màng">
+        <option value="Bóng nước">
+        <option value="Màng nổi hột">
+        <option value="Giòn màng theo chiều MD+ TD">
+        <option value="Bề mặt có các hạt màu đen">
+        <option value="Chỉ số TD, MD không đạt">
+        <option value="Chỉ số Dart drop không đạt">
+        <option value="Moto thu cuộn bị hư - trục in hư">
+        <option value="Senso bắt hình in bị lỗi">
+        <option value="Bể bạc đạn lô">
+        <option value="Đầu khuôn dơ">
+        <option value="Gãy ốc">
+        <option value="Xiếc ốc không chặt">
+        <option value="Lô bị mòn">
+        <option value="Xilanh, lô ép bị vẹt">
+        <option value="Đứt dây curoa">
+        <option value="Trầy, mẻ vít tải">
+        <option value="Thay ti">
+        <option value="Bạc đạn moto chính bị hư">
+        <option value="Thay đầu khuôn">
+        <option value="Thay đầu lò">
+        <option value="Sang hàng">
+        <option value="Hư cân định lượng">
+        <option value="Tuột nhiệt + tuột hơi">
+        <option value="Hư board nhiệt">
+        <option value="Đứt dây điện trở">
+        <option value="Đứt dây điện">
+        <option value="Hư quạt giải nhiệt">
+        <option value="Đứt cầu chì">
+        <option value="Moto chính mất pha">
+        <option value="Hư Corona">
+        <option value="Đứt dây đầu lò">
+        <option value="Chập điện">
+        <option value="Xử lý Corona">
+        <option value="Lắp giàn xếp 8 - thay đầu HĐ - Dời giàn in">
+        <option value="Bảo trì điện">
+        <option value="Cảo báo lỗi">
+        <option value="Gãy ốc đầu lò">
+        <option value="Hư motor trục in">
+        <option value="Lỗi do trục in">
+        <option value="Lỗi màu nguyên liệu">
+        <option value="Lẫn lộn nguyên liệu">
+        <option value="Lỗi do nguyên liệu - Tái sinh dơ">
+        <option value="Thiếu nguyên liệu trộn (Ko có keo)">
+        <option value="Nguyên liệu bị ẩm">
+        <option value="Lỗi keo zin bị quá hạn">
+        <option value="Thiếu nhân sự">
+        <option value="Chạy bao ngoài">
+        <option value="Thay vải bọc ty">
+        <option value="Off máy do thiếu giàn in">
+        <option value="Lên máy">
+        <option value="Chỉnh dao">
+        <option value="Gắn máy in + Corona">
+        <option value="Đổi hàng súc máy">
+        <option value="Thay đầu lò từ HD - LD + giàn in">
+        <option value="Thay máng mực">
+        <option value="Vệ sinh đầu lò">
+        <option value="Lỗi sọc màng thay đầu">
+        <option value="Thay ốc đầu lò">
+        <option value="Thay cảo">
+        <option value="Đi lại dây điện">
+        <option value="Bảo dưỡng máy theo KH">
+        <option value="Thay trục vít">
+        <option value="Lên trục và ống đồng lên máy">
+        <option value="Hư ben hơi">
+        <option value="Cạo đầu lò">
+        <option value="Hư CB nguồn">
+        <option value="Thay khuôn">
+        <option value="Kéo máy đầu tuần">
+        <option value="Thay lưới">
+        <option value="Thử keo">
+        <option value="Chạy mẫu">
+        <option value="Rửa máy">
+        <option value="Đủ hàng">
+        <option value="Thử mực">
+        <option value="Thử keo đỏ tpp">
+        <option value="Hư máy">
+        <option value="Chưa xác định">
+        <option value="Test màu">
+        <option value="Hư kéo phụ">
+        <option value="Hư thu cuộn">
+        <option value="Máy hư">
+        <option value="Vệ sinh đầu khuôn">
+        <option value="Chờ keo">
+        <option value="Hư hộp số cảo">
+        <option value="Hư nhiệt">
+        <option value="Hư nhiệt đầu">
+        <option value="Hư lô thu cuộn">
+        <option value="Trộn sai công thức">
+        <option value="Tạm ngưng">
+        <option value="Chờ nguyên liệu">
+        <option value="Hư quạt gió">
+        <option value="Máy rò điện">
+        <option value="Chạy mẫu LD">
+        <option value="Hư mô tơ cảo">
+        <option value="Hư kéo trên">
+        <option value="Xì bóng">
+        <option value="Sửa dàn xếp">
+        <option value="Cúp điện kéo máy">
+        <option value="Khác màu">
+        <option value="Keo ướt">
+        <option value="Xì đầu lưới">
+        <option value="Hư lô cao su">
+        <option value="Hư xịt hương">
+        <option value="Keo bóng nước">
+        <option value="Chạy hàng hút ẩm">
+        <option value="Xì đứt canh chỉnh lại máy">
+        <option value="Hư động cơ chính">
+        <option value="Keo lên hột">
+        <option value="Keo đứt xì">
+        <option value="Chờ kế hoạch">
+        <option value="Hư lô kéo trên">
+        <option value="Thay mực in và dung môi">
+        <option value="Sọc đầu khuôn">
+        <option value="Nhảy CB nhiệt nòng">
+        <option value="Hư điện trở">
+        <option value="Hư trục in">
+        <option value="Keo không lên">
+        <option value="Biến tần cảo báo lỗi">
+        <option value="Hết nguyên liệu">
+        <option value="Hư đường hơi">
+        <option value="Canh chỉnh máy">
+        <option value="Chờ nhiệt">
+        <option value="Hư hút keo">
+        <option value="Kéo máy">
+        <option value="Đứt màng">
+        <option value="Cạo vải">
+        <option value="Thay bạc đạn">
+        <option value="Thay lô">
+        <option value="Hư máy in">
+        <option value="Thay gạc mực">
+        <option value="Hư lô kéo phụ">
+        <option value="Lên hàng mới">
+        <option value="Dừng máy">
+        <option value="Chạy hàng bù">
+        <option value="Xước trục in">
+        <option value="Vệ sinh mâm gió">
+        <option value="Làm ty cáng màng">
+        <option value="Thay chén">
+        <option value="Cháy dây pha motor đùn">
+        <option value="Thay ống đồng">
+        <option value="Lệch tâm máy">
+        <option value="Thay dao xếp hông">
+        <option value="Thay trục in">
+        <option value="Hư nhông">
+        <option value="Thay bánh răng đầu thu">
+        <option value="Xước lô">
+        <option value="Tăng sên thu cuộn">
+        <option value="Thay lô thu cuộn">
+        <option value="Hư đầu lưới">
+        <option value="Lỗi đầu thu">
+        <option value="Nhảy đường cắt">
+        <option value="Hư lô kéo">
+        <option value="Lỗi nhiệt">
+        <option value="Chạy mẫu">
+        <option value="Sống cháy">
+        <option value="Gãy đũa">
+        <option value="Lệch hành trình">
+        <option value="Thiếu cuộn, không có công nhân">
+        <option value="Đổi hàng">
+        <option value="Chỉnh sống cháy">
+        <option value="Thay mắt trâu">
+        <option value="Hư thắng motor chính">
+        <option value="Thay mâm dao">
+        <option value="Sang hàng">
+        <option value="Lấy mẫu">
+        <option value="Chỉnh mối dán quai">
+        <option value="Chỉnh mối dán">
+        <option value="Chỉnh mối dán đáy">
+        <option value="Không xả phế">
+        <option value="Thổi đứt xì">
+        <option value="Hư thắng mô tơ thu cuộn">
+        <option value="Máy thổi hư">
+        <option value="Thổi 1 máy">
+        <option value="Thay ống hơi ben đầu thu">
+        <option value="Đứt dây vánolenoi">
+        <option value="Không xuống phế">
+        <option value="Đứt màng">
+        <option value="Tụt nhiệt đáy">
+        <option value="Hư ốc tay dên">
+        <option value="Dãn mối dán">
+        <option value="Không rút đũa">
+        <option value="Gãy ốc ty dao">
+        <option value="Hư ben hơi">
+        <option value="Canh cần bù">
+        <option value="Chạy hàng bù">
+        <option value="Bở quai">
+        <option value="Hư lô dẫn màng">
+        <option value="Kẹt đũa">
+        <option value="Thay dây curoa đảo cuộn">
+        <option value="Thay lò xo mâm dao">
+        <option value="Gãy thanh gắn dao nhiệt">
+        <option value="Chỉnh cuộn xấu">
+        <option value="Thay bố thắng">
+        <option value="Lệch đũa">
+        <option value="Đứt xích đầu thu">
+        <option value="Hư lô kéo màng">
+        <option value="Thay ben hơi dao quai">
+        <option value="Lỗi servo">
+        <option value="Thay dây sên">
+        <option value="Thay dây dò">
+        <option value="Hư bánh lăn">
+        <option value="Tháo máy dán tem">
+        <option value="Thiếu cuộn không rút">
+        <option value="Không xã màng">
+        <option value="Gãy ốc lô dẫn màng">
+        <option value="Lệch quai đứt màng liên tục">
+        <option value="Lệch cam">
+        <option value="Kéo túi">
+        <option value="Thay lô kéo">
+        <option value="Thay dây curoa trục chính">
+        <option value="Gãy ti dao">
+        <option value="Xéo mối dán">
+        <option value="Xéo mối dán quai">
+        <option value="Xéo mối dán đáy">
+        <option value="Hụt đũa">
+        <option value="Canh chỉnh cam">
+        <option value="Hư ben lên cuộn">
+        <option value="Đứt dây curoa xã màng">
+        <option value="Siết cuộn quá chặt">
+        <option value="Thay tăng đơ">
+        <option value="Thay dây curoa đầu thu">
+        <option value="Thiếu cuộn thổi giảm máy">
+        <option value="Đứt dây curoa kéo lô">
+        <option value="Hư ben đầu thu">
+        <option value="Lỗi đầu thu off lúc 12h">
+        <option value="Bể bạc đạn lô kéo">
+        <option value="Đứt dây curoa servo">
+        <option value="Tuôn ốc tay dên">
+        <option value="Gãy ốc càng bù">
+        <option value="Đợi cuộn">
+        <option value="Off máy gắn máy dán tem">
+        <option value="Làm lại mâm dao">
+        <option value="Giòn đáy">
+        <option value="Lên máy">
+        <option value="Dính phế">
+        <option value="Đứt dây dò nhiệt">
+        <option value="Xé dai">
+        <option value="Chập điện">
+        <option value="Lỗi động cơ chính">
+        <option value="Off máy chạy mẫu">
+        <option value="Thay xích mô tơ chính">
+        <option value="Đứt dây curoa">
+        <option value="Thay dây curoa kéo lô">
+        <option value="Lệch cam hành trình">
+        <option value="Thay dây curoa">
+        <option value="Hư tăng đơ xích mô tơ chính">
+        <option value="Hư dao cắt">
+        <option value="Gãy ốc gắn mâm dao">
+        <option value="Gãy ty gắn ống lõi">
+        <option value="Thay bạc đạn tay dên">
+        <option value="Đứt dây curoa trục chính">
+        <option value="Chạy 1 line">
+        <option value="Thay bạc đạn mắt trâu">
+        <option value="Thay điện trở">
+        <option value="Thay vãi nhiệt">
+        <option value="Hư contacter">
+        <option value="Rọc hơi">
+        <option value="Chưa xác định">
+        <option value="Cuộn nặng nhẹ">
+        <option value="Hư lô xã màng">
+        <option value="Hư dao quai">
+        <option value="Đổi máy chạy">
+        <option value="Hết tem">
+        <option value="Thay bti">
+        <option value="Thay bạc dao quai">
+        <option value="Thay đồng hồ nhiệt">
+        <option value="Thay thắng đầu thu">
+        <option value="Gãy ốc gắn dao quai">
+        <option value="Thay senso">
+        <option value="Gãy ty nối dao quai">
+        <option value="Làm lại dao quai">
+        <option value="Thay ti dao quai">
+        <option value="Gãy bu li">
+        <option value="Thay ống lõi">
+        <option value="Đũa dính nhớt">
+        <option value="Thay lô phóng">
+        <option value="Hư mô tơ lô kéo">
+        <option value="Thay dây curoa mô tơ chính">
+        <option value="Gãy bát gắn vãi nhiệt">
+        <option value="Gãy con lăn dẫn màng">
+        <option value="Bảo trì lại máy">
+        <option value="Hư bát dao dán">
+        <option value="Hư gối đỡ">
+        <option value="Hư encoder hành trình">
+        <option value="Tuôn nhông đầu thu">
+        <option value="Quá nhiệt">
+        <option value="Làm lại bu li">
+        <option value="Hư sensor cần bù">
+        <option value="Không thu cuộn">
+        <option value="Lỗi biến tần">
+        <option value="Hư mô tơ xã màng">
+        <option value="Canh dây curoa">
+        <option value="Lệch tăng xích">
+        <option value="Thay ống phế">
+        <option value="Thay bạc đạn">
+        <option value="Thay mô tơ đảo cuộn">
+        <option value="Thay bạc đạn lô kéo">
+        <option value="Thay biến trở">
+        <option value="Kẹt cốt mâm dao">
+        <option value="Hụt đầu">
+        <option value="Hư tay dên">
+        <option value="Hư cốt đầu thu">
+        <option value="Thay đũa đầu thu">
+        <option value="Rách túi trong cùng">
+        <option value="Thay bánh răng đầu thu">
+        <option value="Chạy bao ngoài">
+        <option value="Lắp gạt te">
+        <option value="Đợi cuộn chạy 1 line">
+        <option value="Nhiệt dao động">
+        <option value="Lỗi màn hình">
+        <option value="Thay dao nhiệt">
+        <option value="Gãy bulong gắn dao nhiệt">
+        <option value="Đứt dây điện trở">
+        <option value="Dai ngọt">
+        <option value="Nối màng">
+        <option value="Gãy dao dập">
+        <option value="Hư cốt xả màng">
+        <option value="Thay lô">
+        <option value="Bở quai làm lại mâm dao">
+        <option value="Off máy kiểm tra">
+        <option value="Hư thanh gắn vải nhiệt">
+        <option value="Hư bát dao quai">
+        <option value="Tuột sên, tuột ốc tai dên">
+        <option value="Hư bo điều khiển">
+        <option value="Mòn cốt trục mâm dao">
+        <option value="Sụp dao">
+        <option value="Gãy tăng đơ xích">
+        <option value="Hư bạc đạn tay dên">
+        <option value="Gãy bát gắn ben hơi">
+        <option value="Thay motor máy dán tem">
+        <option value="Làm lại dao đáy">
+        <option value="Mòn cốt lô kéo">
+        <option value="Sang hàng, thay mâm">
+        <option value="Hư đồng hồ nhiệt">
+        <option value="Đầu thu hư bánh răng">
+        <option value="Mòn cốt dao">
+        <option value="Sửa chữa, thay thế đường hơi">
+        <option value="Lỗi xả màng">
+        <option value="Sang hàng test máy dán tem">
+        <option value="Thay cốt dao">
+        <option value="Hư puly lô">
+        <option value="Bể bạc đạn motor xả màng">
+        <option value="Về sớm">
+        <option value="Hư buli trục motor chính">
+        <option value="Mòn ti trục mâm dao">
+        <option value="Lỗi plc">
+        <option value="Lô quay ngược">
+        <option value="Mòn cốt con lăn dẫn màng">
+        <option value="Đợi cuộn, thổi kéo xì đứt">
+        <option value="Chạy máy dán tem">
+        <option value="Hư càng bù">
+        <option value="Xé túi không đều">
+        <option value="Gãy cốt trục chính">
+        <option value="Gãy ốc dao đáy">
+        <option value="Đợi nhiệt">
+        <option value="Lệch quai">
+        <option value="Cuộn xấu">
+        <option value="Hư công tắc hành trình 3 quai">
+        <option value="Thay khớp nối dao quai">
+        <option value="Thiếu cuộn, off máy">
+        <option value="Kẹt bạc đạn lô xả màng">
+        <option value="Thay bạc đạn uc">
+        <option value="Sống cháy xé dai, rách đường cắt ở đáy, hư bạc ty dao đáy">
+        <option value="Sang hàng thay mâm dao">
+        <option value="Đi họp">
+        <option value="Không rút đũa hư ben hơi">
+        <option value="Con lăn xả màng rách màng">
+        <option value="Đứng máy liên tục">
+        <option value="Lệch hành trình trục chính">
+        <option value="Hư senso">
+        <option value="Thay xích đầu thu">
+        <option value="Thay bố thắng, nhảy đường cắt">
+        <option value="Khoan lỗ gắn lô kéo">
+        <option value="Gãy tăng đơ motor thu cuộn">
+        <option value="Gắn thanh lệch đũa">
+        <option value="Bắn đũa lệch">
+        <option value="Lỗi đầu thu duộc đũa">
+        <option value="Lệch hành trình dao quai">
+        <option value="Thiếu cuộn">
+        <option value="Thay ben hơi">
+        <option value="Kẹt đũa căn lại ben hơi">
+        <option value="Kẹt đũa thay ben hơi">
+        <option value="Lỏng servo">
+        <option value="Gãy ốc lăn dẫn màng">
+        <option value="Canh thắng đầu thu">
+        <option value="Chỉnh ben hơi đầu thu">
+        <option value="Lên máy sang hàng">
+        <option value="Thay vãi nhiệt đáy">
+        <option value="Gắn con lăn">
+        <option value="Thay sensor">
+        <option value="Gãy ty dao quai">
+        <option value="Hư sensor xã màng">
+        <option value="Hư sensor bắt màng">
+        <option value="Lỗi càng bù chỉnh quấn cuộn xé túi">
+        <option value="Gãy ty dao cắt">
+        <option value="Sang hàng thay mâm dao, thay dao dán đáy, làm lại dao cắt 3cm">
+        <option value="Hư ben hơi rút đũa">
+        <option value="Không rút đũa thay sensor">
+        <option value="Hư sàng màng đầu thu">
+        <option value="Tắt máy">
+        <option value="Đủ hàng tắt máy">
+        <option value="Làm lại vãi nhiệt">
+        <option value="Mất nhiệt">
+        <option value="Tụt nhiệt quai">
+        <option value="Gãy ốc thanh đỡ ben lên cuộn">
+        <option value="Lỏng cốt tay dên">
+        <option value="Cắt xích căn lại hành trình">
+        <option value="Hư cổ góp đầu thu">
+        <option value="Lệch chiều dài">
+        <option value="Gãy dao cắt, thay mâm dao">
+        <option value="Hết đơn hàng">
+        <option value="Thay ty mâm dao">
+        <option value="Hư servo đảo cuộn">
+        <option value="Tuột ống phế">
+        <option value="Bánh lăn cuộn không quay, thay thớt dính phế">
+        <option value="Cuộn thổi dày mỏng">
+        <option value="Lệch đũa căn chỉnh thắng">
+        <option value="Gãy ốc thanh đỡ motor chính">
+        <option value="Lỗi motor trục chính">
+        <option value="Nổ điện dao quai">
+        <option value="Gãy ốc giò gà">
+        <option value="Gãy ốc ty dao đập">
+        <option value="Kẹt trục đầu thu">
+        <option value="Lỗi tín hiệu cam">
+        <option value="Gãy bát dao quai">
+        <option value="Tuột nhiệt">
+        <option value="Gãy ốc ben hơi dao quai">
+        <option value="Bể bạc đạn trục">
+        <option value="Kẹt bánh xe xã màng">
+        <option value="Hư khớp nối trục dao quai">
+        <option value="Tuôn buly servo chính">
+        <option value="Dao quai trái ngắn bị hụt mối dán">
+        <option value="Hư nguồn 24v">
+        <option value="Lỏng cốt motor đầu thu">
+        <option value="Thay bánh răng lô đẩy cuộn">
+        <option value="Thay đế silicon">
+        <option value="Thay bánh lăn">
+        <option value="Gãy ốc bàn dán tem">
+        <option value="Không tời màng">
+        <option value="Đứt xích tuôn nhông">
+        <option value="Đứt dây curoa hành trình">
+        <option value="Dao không dập">
+        <option value="Kẹt cốt mô tơ xã màng">
+        <option value="Làm dao vải nhiệt">
+        <option value="Lồi õm">
+        <option value="Lô rớt phe">
+        <option value="Thay vải nhiệt">
+        <option value="Chuyển máy">
+        <option value="Tuột ống lõi">
+        <option value="Đứt dây dằn cuộn">
+        <option value="Lệch mối dán quai">
+        <option value="Màng quấn lô">
+        <option value="Kẹt cốt đầu thu">
+        <option value="Chỉnh mối dán quai, thay đế silicon">
+        <option value="Thay lô trước">
+        <option value="Thay bạc dao">
+        <option value="Hư hmi">
+        <option value="Hư motor tủ cuộn">
+        <option value="Gãy ốc thanh gắn con lăn đè màng">
+        <option value="Mòn cốt lô giữa">
+        <option value="Gãy ốc dao nhiệt">
+        <option value="Bể ống hơi">
+        <option value="Test 1">
+        <option value="Đũa không quay">
+        <option value="Hư servo, mất nguồn 24v">
+        <option value="Kẹt ty trượt dao nhiệt">
+        <option value="Thay thớt">
+        <option value="Gãy ốc đầu thu">
+        <option value="Mòn cốt trục chính">
+        <option value="Hư thanh dẫn màng">
+        <option value="Mất hơi thổi phế">
+        <option value="Hư van solenoi">
+        <option value="Đầu ca canh chỉnh mối dán, đứt màng liên tục">
+        <option value="Sửa lỗi tốc độ động cơ">
+        <option value="Bể bạc đạn tay dên">
+        <option value="Thay motor thu cuộn">
+        <option value="Bể phốt hộp số motor">
+        <option value="Nối màng do cuộn">
+        <option value="Nối màng do máy cắt">
+        <option value="Bung má chăn dây đai">
+        <option value="Thay băng keo nhiệt">
+        <option value="Mất điện">
+        <option value="Mòn cốt lavet">
+        <option value="Gắn bát gắn sensor">
+        <option value="Hết thùng">
+        <option value="Hết cont">
+        <option value="Căn chỉnh lô">
+        <option value="Xé túi">
+        <option value="Luồn màng">
+        <option value="Lỏng chốt motor xã màng">
+        <option value="Không đảo cuộn">
+        <option value="Kẹt ti dao dập">
+        <option value="Dao dập một chỗ">
+        <option value="Cháy bộ khử từ">
+        <option value="Gãy ốc khớp nối dao dập">
+        <option value="Rớt dao quai">
+        <option value="Hư bạc đạn khớp nối">
+        <option value="Đứt dây nhiệt đáy">
+        <option value="Hư cb">
+        <option value="Rách màng">
+        <option value="Chỉnh mối dán quai (chỉnh nhiệt)">
+        <option value="Chỉnh mối dán quai (chỉnh dao)">
+        <option value="Chỉnh mối dán đáy (chỉnh nhiệt)">
+        <option value="Chỉnh mối dán đáy (chỉnh dao)">
+        <option value="Thay con lăn càng bù">
+        <option value="Gãy ty nối dao đáy">
+        <option value="Đếm sai túi">
+        <option value="Nhăn màng">
+        <option value="Gắn thanh chống kẹt tay">
+        <option value="Thay mắt bắt đũa">
+        <option value="Bể bạc đạn mắt trâu">
+        <option value="Hàn trục lô">
+        <option value="Mòn cốt buly">
+        <option value="Canh chỉnh sống cháy bở quai">
+        <option value="Test nước">
+        <option value="Gắn thêm nút">
+        <option value="Bỏ đũa">
+        <option value="Thay chiếu càng bù">
+        <option value="Thay motor đầu thu">
+        <option value="Cuộn hụt">
+        <option value="Thay đế">
+        <option value="Cháy quai">
+        <option value="Cháy đáy">
+        <option value="Hư van tiết lưu">
+        <option value="Thanh thanh ngang lô trên">
+        <option value="Sập mâm dao">
+        <option value="Kẹt lô">
+        <option value="Duộc dây curoa">
+        <option value="Bể bạc đạn mâm dao">
+        <option value="Hư motor xã màng">
+        <option value="Đóng thùng">
+        <option value="Lỗi cắt màng">
+        <option value="Chỉnh cuộn hơi">
+        <option value="Thay bao phế">
+        <option value="Chỉnh nhiệt đáy">
+        <option value="Dai đường cắt">
+        <option value="Canh chỉnh máy">
+        <option value="Chà nhám">
+        <option value="Lệch hình in">
+        <option value="Bở quai, thay thớt">
+        <option value="Gãy ốc giữ bánh xe xã màng">
+        <option value="Mài dao">
+        <option value="Lệch dao">
+        <option value="Thay lò xo">
+        <option value="Máy hư">
+        <option value="Hư bulong tay dên">
+        <option value="Xé túi sai">
+        <option value="Gắn thanh định vị màng">
+        <option value="Lắp chụp đũa">
+        <option value="Gãy cốt đầu thu">
+        <option value="Gãy ốc bắn đũa">
+        <option value="Hư ren gắn biến trở xã màng">
+        <option value="Gãy ty đầu thu cuộn">
+        <option value="Chỉnh mắt đường cắt">
+        <option value="Bảo trì trục chuyển động">
+        <option value="Gãy khớp nối ty ren bánh đà">
+        <option value="Tuôn ren dao quai">
+        <option value="Không dừng được máy">
+        <option value="Đứt dây điện đầu thu">
+        <option value="Tăng đưa curoa">
+        <option value="Đấu dây điện">
+        <option value="Tuôn ốc bắn đũa">
+        <option value="Thay ben hơi cần bù">
+        <option value="Gãy cần bù thu cuộn">
+        <option value="Tuôn ốc mắt trâu">
+        <option value="Thay ti motor xã màng">
+        <option value="Gãy ốc ti dẫn màng">
+        <option value="Gãy bát đỡ motor xã màng">
+        <option value="Không ra đũa">
+        <option value="Lò xo quấn lô">
+        <option value="Gãy tăng đơ">
+        <option value="Lệch xích">
+        <option value="Thay băng keo dao đáy">
+        <option value="Thay sensor đầu thu">
+        <option value="Làm lại đũa">
+        <option value="Lắp sang màng">
+        <option value="Thay lô giữa">
+        <option value="Hư biến trở hành trình">
+        <option value="Trùng xích đầu thu">
+        <option value="Gãy chân khung lên cuộn">
+        <option value="Gãy bulong tay dên">
+        <option value="Mất nguồn đầu thu">
+        <option value="Gãy khớp nối tay dên">
+        <option value="Gãy ty tay dên">
+        <option value="Gãy bulong mâm dao">
+        <option value="Kẹt cốt lên cuộn">
+        <option value="Hư ốp đũa">
+        <option value="Chỉnh lô">
+        <option value="Nối dây tiếp đất">
+        <option value="Xử lý màng do cuộn xấu">
+        <option value="Gãy ốc tăng đơ dao">
+        <option value="Gắn quạt tản nhiệt">
+        <option value="Lắp khử từ">
+        <option value="Không đếm túi">
+        <option value="Thay dao">
+        <option value="Duột đũa">
+        <option value="Hư bạc đạn motor xã màng">
+        <option value="Hư tay quai bắt màng">
+        <option value="Hư nút nhấn">
+        <option value="Hư bạc đạn dao nhiệt">
+        <option value="Chỉnh quét hương">
+        <option value="Thay ti ben hơi">
+        <option value="Hàn lại đũa">
+        <option value="Gãy ốc bát xuống xuộn">
+        <option value="Canh chỉnh lại ti ren">
+        <option value="Bắt sai hình in">
+        <option value="Gãy cây xếp cuộn">
+        <option value="Gãy dao cắt hàn lại">
+        <option value="Hư bạc đạn quả khế">
+        <option value="Tuột ốc con lăn">
+        <option value="Gãy dao">
+        <option value="Trùng dây curoa hành trình">
+        <option value="Mòn nhông đầu thu">
+        <option value="Gãy ti ren">
+        <option value="Lô không quay">
+        <option value="Lô tự quay">
+        <option value="Hơi yếu">
+        <option value="Gãy tay quay">
+        <option value="Bể bạc đạn">
+        <option value="Cuộn bị đôn đầu đũa">
+        <option value="Gãy bắp giữ ống lõi">
+        <option value="Hư cảm biến hành trình">
+        <option value="Tuôn nhông lô kéo">
+        <option value="Chỉnh ngắt túi">
+        <option value="Lỏng cốt buly đảo cuộn">
+        <option value="Thay cp">
+        <option value="Hư bạc đạn motor chính">
+        <option value="Thay bạc đạn cốt dao đáy">
+        <option value="Dọn máy">
+        <option value="Lủng màng">
+        <option value="Căn chỉnh dao">
+        <option value="Kéo cuộn">
+        <option value="Đảo cuộn đứt màng">
+        <option value="Quay vải nhiệt">
+        <option value="Màng căng">
+        <option value="Không vào lõi">
+        <option value="Thay keo đế">
+        <option value="Dính quai">
+        <option value="Khác màu">
+        <option value="Lem màu in">
+        <option value="Nhỏ hơn dung sai">
+        <option value="So màng">
+        <option value="Chờ lệnh">
+        <option value="Đợi ống lõi">
     </datalist>
     
     <h1>Lưu Thời Gian</h1>
@@ -68,24 +712,6 @@
         </div>
         <div id="currentTime">Thời gian hiện tại: --:--:--</div>
         <button id="logoutButton">Đăng xuất</button>
-        <div id="historySection">
-            <h2>Lịch sử dữ liệu</h2>
-            <table id="historyTable">
-                <thead>
-                    <tr>
-                        <th>Thời gian bắt đầu</th>
-                        <th>Tên máy</th>
-                        <th>Lỗi</th>
-                        <th>Thời gian xử lý (phút)</th>
-                        <th>Hướng khắc phục</th>
-                        <th>Ca</th>
-                        <th>Người nhập</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="historyTableBody"></tbody>
-            </table>
-        </div>
     </div>
 
     <script>
@@ -105,7 +731,6 @@
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
         const machineNameInput = document.getElementById('machineName');
         const solutionInput = document.getElementById('solution');
-        const historyTableBody = document.getElementById('historyTableBody');
 
         // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
@@ -161,7 +786,6 @@
                 usernameInput.value = savedUsername || '';
                 caInput.value = savedCa || 'A';
                 machineNameInput.value = savedMachineName || '';
-                fetchHistory(); // Tải lịch sử khi đăng nhập
             }
         }
 
@@ -182,7 +806,6 @@
                 loginSection.style.display = 'none';
                 mainSection.style.display = 'block';
                 saveState();
-                fetchHistory(); // Tải lịch sử sau khi đăng nhập
             } else {
                 alert('Sai tên đăng nhập hoặc mật khẩu!');
             }
@@ -211,70 +834,7 @@
             clearState();
             mainSection.style.display = 'none';
             loginSection.style.display = 'block';
-            historyTableBody.innerHTML = ''; // Xóa bảng lịch sử khi đăng xuất
         });
-
-        // Lấy dữ liệu lịch sử từ API
-        async function fetchHistory() {
-            try {
-                const response = await fetch('https://vercel-deploy-websavetime.vercel.app/api/back');
-                if (response.ok) {
-                    const data = await response.json();
-                    renderHistory(data);
-                } else {
-                    alert('Không thể tải lịch sử.');
-                }
-            } catch (error) {
-                alert('Lỗi kết nối khi tải lịch sử.');
-            }
-        }
-
-        // Hiển thị dữ liệu lịch sử trong bảng
-        function renderHistory(data) {
-            historyTableBody.innerHTML = '';
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                const startTime = new Date(item.startTime).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
-                row.innerHTML = `
-                    <td>${startTime}</td>
-                    <td>${item.machineName}</td>
-                    <td>${item.error}</td>
-                    <td>${item.errorDuration}</td>
-                    <td>${item.solution}</td>
-                    <td>${item.ca}</td>
-                    <td>${item.username}</td>
-                    <td><button class="deleteButton" data-id="${item._id}">Xóa</button></td>
-                `;
-                historyTableBody.appendChild(row);
-            });
-
-            // Thêm sự kiện cho các nút xóa
-            document.querySelectorAll('.deleteButton').forEach(button => {
-                button.addEventListener('click', async () => {
-                    const id = button.getAttribute('data-id');
-                    if (confirm('Bạn có chắc muốn xóa bản ghi này?')) {
-                        await deleteRecord(id);
-                    }
-                });
-            });
-        }
-
-        // Xóa bản ghi
-        async function deleteRecord(id) {
-            try {
-                const response = await fetch(`https://vercel-deploy-websavetime.vercel.app/api/back/${id}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    alert('Xóa bản ghi thành công.');
-                    fetchHistory(); // Tải lại lịch sử sau khi xóa
-                } else {
-                    alert('Không thể xóa bản ghi.');
-                }
-            } catch (error) {
-                alert('Lỗi kết nối khi xóa bản ghi.');
-            }
-        }
 
         // Lưu lỗi
         submitErrorButton.addEventListener('click', async () => {
@@ -329,7 +889,6 @@
                     longTimeInput.value = '';
                     solutionInput.value = '';
                     elapsedMinutes = null;
-                    fetchHistory(); // Tải lại lịch sử sau khi lưu
                 } else {
                     alert('Đã xảy ra lỗi khi lưu.');
                 }
