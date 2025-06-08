@@ -1,10 +1,11 @@
+```javascript
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
 
-// Cấu hình MongoDB (Thay `YOUR_MONGODB_URI` bằng URI MongoDB của bạn)
+// Cấu hình MongoDB
 const MONGO_URI = 'mongodb+srv://koconik111:glhAYPHZa6XD8DP1@cluster0.hwbp9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Kết nối MongoDB thành công!'))
@@ -19,7 +20,7 @@ const logSchema = new mongoose.Schema({
   endTime: { type: Date, required: true },
   error: { type: String, required: true },
   errorDuration: { type: Number, required: true },
-  solution: { type: String, required: false } // Thêm trường solution, không bắt buộc
+  solution: { type: String, required: false }
 });
 
 const Log = mongoose.model('Log', logSchema);
@@ -28,9 +29,9 @@ const Log = mongoose.model('Log', logSchema);
 app.use(cors());
 app.use(express.json());
 
-// API xử lý lưu dữ liệu
+// API lưu dữ liệu
 app.post('/api/back', async (req, res) => {
-  const { username, ca, machineName, startTime, endTime, error, errorDuration, solution } = req.body;
+  const { username, ca, machineName, startTime, endTime, error, errorDuration, solution } logSchema = req.body;
 
   // Kiểm tra các trường bắt buộc
   if (!username || !ca || !machineName || !startTime || !endTime || !error || !errorDuration) {
@@ -47,6 +48,33 @@ app.post('/api/back', async (req, res) => {
   }
 });
 
+// API lấy danh sách lịch sử
+app.get('/api/back', async (req, res) => {
+  try {
+    const logs = await Log.find().sort({ startTime: -1 }); // Sắp thứ tự theo thời gian bắt đầu (mới nhất trước)
+    res.status(200).json(logs);
+  } catch (err) {
+    console.error('Lỗi khi lấy danh sách lịch sử:', err.message);
+    res.status(500).json({ error: 'Lỗi khi lấy danh sách lịch sử.' });
+  }
+});
+
+// API xóa bản ghi
+app.delete('/api/back/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedLog = await Log.findByIdAndDelete(id);
+    if (!deletedLog) {
+      return res.status(404).json({ error: 'Bản ghi không tồn tại.' });
+    }
+    res.status(200).json({ message: 'Xóa bản ghi thành công!' });
+  } catch (err) {
+    console.error('Lỗi khi xóa bản ghi:', err.message);
+    res.status(500).json({ error: 'Lỗi khi xóa bản ghi.' });
+  }
+});
+
 // Xử lý endpoint không hợp lệ
 app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint không hợp lệ.' });
@@ -54,3 +82,4 @@ app.use((req, res) => {
 
 // Export server cho Vercel
 module.exports = app;
+```
