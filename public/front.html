@@ -45,13 +45,13 @@
             <option value="B">Ca B</option>
         </select>
         <div>
-            <label for="machineName">Tên máy:</label>
+            <label for="machineName">Tên aws:</label>
             <input type="text" id="machineName" placeholder="Nhập tên máy">
         </div>
         <div id="longTimeSection">
-            <label for="startTime"><span class="highlight-red">B2</span>Giờ bắt đầu (24h):</label>
+            <label for="startTime"><span class="highlight-red">B2</span>Nhập giờ bắt đầu (24h):</label>
             <input type="time" id="startTime" placeholder="HH:MM">
-            <label for="endTime"><span class="highlight-red">B3</span>Giờ kết thúc (24h):</label>
+            <label for="endTime"><span class="highlight-red">B3</span>Nhập giờ kết thúc (24h):</label>
             <input type="time" id="endTime" placeholder="HH:MM">
             <button id="saveLongTimeButton">Lưu thời gian</button>
         </div>
@@ -78,7 +78,7 @@
     </div>
 
     <script>
-        let elapsedMinutes;
+        let startDate, endDate, elapsedMinutes;
 
         const loginSection = document.getElementById('loginSection');
         const mainSection = document.getElementById('mainSection');
@@ -90,13 +90,10 @@
         const passwordInput = document.getElementById('password');
         const submitErrorButton = document.getElementById('submitError');
         const currentTimeDisplay = document.getElementById('currentTime');
-        const startTimeInput = document.getElementById('startTime');
-        const endTimeInput = document.getElementById('endTime');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
         const machineNameInput = document.getElementById('machineName');
         const solutionInput = document.getElementById('solution');
         const errorTypeInput = document.getElementById('errorType');
-
         // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
             { username: 'Đậu Văn Nhớ', password: '1234' },
@@ -110,14 +107,11 @@
             { username: 'Bùi Hữu Gia Phú', password: '1234' },
             { username: 'hieu', password: '1234' }
         ];
-
-        // Khởi tạo ca
-        function updateShift() {
-            caInput.value = 'A'; // Mặc định chọn ca A
+function updateShift() {
+            caInput.value = 'A';
         }
         updateShift();
 
-        // Cập nhật thời gian thực
         function updateTime() {
             const now = new Date();
             const vietnamTime = new Date(now.getTime() + 7 * 60 * 60 * 1000);
@@ -126,7 +120,6 @@
         }
         setInterval(updateTime, 1000);
 
-        // Lưu trạng thái vào localStorage
         function saveState() {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', usernameInput.value.trim());
@@ -134,7 +127,6 @@
             localStorage.setItem('machineName', machineNameInput.value.trim());
         }
 
-        // Tải trạng thái từ localStorage
         function loadState() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const savedUsername = localStorage.getItem('username');
@@ -150,12 +142,10 @@
             }
         }
 
-        // Xóa trạng thái khi đăng xuất
         function clearState() {
             localStorage.clear();
         }
 
-        // Đăng nhập
         loginButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
@@ -172,11 +162,10 @@
             }
         });
 
-        // Lưu thời gian
         saveLongTimeButton.addEventListener('click', () => {
             const ca = caInput.value;
-            const startTime = startTimeInput.value;
-            const endTime = endTimeInput.value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
 
             if (!ca) {
                 alert('Vui lòng chọn ca.');
@@ -187,38 +176,35 @@
                 return;
             }
 
-            // Tạo đối tượng Date từ giờ bắt đầu và giờ kết thúc
-            const [startHours, startMinutes] = startTime.split(':').map(Number);
-            const [endHours, endMinutes] = endTime.split(':').map(Number);
-            const start = new Date();
-            start.setHours(startHours, startMinutes, 0, 0);
-            const end = new Date();
-            end.setHours(endHours, endMinutes, 0, 0);
+            const now = new Date();
+            const [startHour, startMin] = startTime.split(':').map(Number);
+            const [endHour, endMin] = endTime.split(':').map(Number);
 
-            // Tính toán thời gian lỗi (phút)
-            if (end < start) {
-                alert('Giờ kết thúc phải lớn hơn hoặc bằng giờ bắt đầu.');
-                return;
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHour, startMin);
+            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), endHour, endMin);
+
+            if (endDate < startDate) {
+                endDate.setDate(endDate.getDate() + 1);
             }
-            elapsedMinutes = (end - start) / (1000 * 60);
-            if (elapsedMinutes <= 0) {
-                alert('Thời gian lỗi phải lớn hơn 0 phút.');
+
+            const diffMs = endDate - startDate;
+            if (diffMs <= 0) {
+                alert('Giờ kết thúc phải sau giờ bắt đầu.');
                 return;
             }
 
+            elapsedMinutes = diffMs / (1000 * 60);
             alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
             errorInput.style.display = 'block';
             saveState();
         });
 
-        // Đăng xuất
         logoutButton.addEventListener('click', () => {
             clearState();
             mainSection.style.display = 'none';
             loginSection.style.display = 'block';
         });
 
-        // Lưu lỗi
         submitErrorButton.addEventListener('click', async () => {
             submitErrorButton.disabled = true;
             const errorType = errorTypeInput.value;
@@ -251,23 +237,14 @@
                 return;
             }
 
-            const startTime = startTimeInput.value;
-            const endTime = endTimeInput.value;
-            const [startHours, startMinutes] = startTime.split(':').map(Number);
-            const [endHours, endMinutes] = endTime.split(':').map(Number);
-            const vietnamStartTime = new Date();
-            vietnamStartTime.setHours(startHours, startMinutes, 0, 0);
-            const vietnamEndTime = new Date();
-            vietnamEndTime.setHours(endHours, endMinutes, 0, 0);
-
             const data = {
                 username: usernameInput.value,
                 ca: caInput.value,
                 machineName: machineName,
-                startTime: vietnamStartTime.toISOString(),
-                endTime: vietnamEndTime.toISOString(),
+                startTime: startDate.toISOString(),
+                endTime: endDate.toISOString(),
                 error: errorName,
-                errorDuration: parseFloat(elapsedMinutes),
+                errorDuration: elapsedMinutes,
                 solution: solution,
                 errorType: errorType
             };
@@ -281,8 +258,8 @@
                     alert('Lưu dữ liệu thành công.');
                     errorInput.style.display = 'none';
                     machineNameInput.value = machineName;
-                    startTimeInput.value = '';
-                    endTimeInput.value = '';
+                    document.getElementById('startTime').value = '';
+                    document.getElementById('endTime').value = '';
                     solutionInput.value = '';
                     errorTypeInput.value = '';
                     document.getElementById('error').value = '';
@@ -297,7 +274,6 @@
             }
         });
 
-        // Tải trạng thái khi trang tải
         loadState();
     </script>
 </body>
