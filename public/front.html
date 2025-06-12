@@ -12,6 +12,7 @@
         button { margin: 10px 0; padding: 10px 20px; }
         #currentTime { margin-top: 20px; font-weight: bold; }
         textarea { width: 100%; height: 80px; margin-top: 5px; }
+        input[type="time"] { margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -23,7 +24,6 @@
         <option value="Sọc màng">
         <option value="Màng Dày + Màng Mỏng">
         <option value="Tróc hình in">
-        <!-- Other error options remain unchanged; trimmed for brevity -->
         <option value="Chưa xác định">
         <option value="Đợi ống lõi">
     </datalist>
@@ -49,12 +49,14 @@
             <input type="text" id="machineName" placeholder="Nhập tên máy">
         </div>
         <div id="longTimeSection">
-            <label for="longTimeInput"><span class="highlight-red">B2</span>Nhập thời gian xử lý lỗi (phút):</label>
-            <input type="number" id="longTimeInput" placeholder="Thời gian (phút)">
+            <label for="startTime"><span class="highlight-red">B2</span>Giờ bắt đầu (24h):</label>
+            <input type="time" id="startTime" placeholder="HH:MM">
+            <label for="endTime"><span class="highlight-red">B3</span>Giờ kết thúc (24h):</label>
+            <input type="time" id="endTime" placeholder="HH:MM">
             <button id="saveLongTimeButton">Lưu thời gian</button>
         </div>
         <div id="errorInput" style="display: none;">
-            <label for="errorType"><span class="highlight-red">B3</span>Loại lỗi:</label>
+            <label for="errorType"><span class="highlight-red">B4</span>Loại lỗi:</label>
             <select id="errorType">
                 <option value="">Chọn loại lỗi</option>
                 <option value="CM">CM</option>
@@ -65,11 +67,11 @@
                 <option value="COT">COT</option>
                 <option value="RM">RM</option>
             </select>
-            <label for="error"><span class="highlight-red">B4</span>Tên lỗi:</label>
+            <label for="error"><span class="highlight-red">B5</span>Tên lỗi:</label>
             <input type="text" id="error" list="listOfError" placeholder="Nhập lỗi">
-            <label for="solution"><span class="highlight-red">B5</span>Hướng khắc phục:</label>
+            <label for="solution"><span class="highlight-red">B6</span>Hướng khắc phục:</label>
             <textarea id="solution" placeholder="Nhập hướng khắc phục"></textarea>
-            <button id="submitError"><span class="highlight-red">B6</span>Lưu</button>
+            <button id="submitError"><span class="highlight-red">B7</span>Lưu</button>
         </div>
         <div id="currentTime">Thời gian hiện tại: --:--:--</div>
         <button id="logoutButton">Đăng xuất</button>
@@ -88,7 +90,8 @@
         const passwordInput = document.getElementById('password');
         const submitErrorButton = document.getElementById('submitError');
         const currentTimeDisplay = document.getElementById('currentTime');
-        const longTimeInput = document.getElementById('longTimeInput');
+        const startTimeInput = document.getElementById('startTime');
+        const endTimeInput = document.getElementById('endTime');
         const saveLongTimeButton = document.getElementById('saveLongTimeButton');
         const machineNameInput = document.getElementById('machineName');
         const solutionInput = document.getElementById('solution');
@@ -173,19 +176,40 @@
             }
         });
 
-        // Lưu thời gian dài
+        // Lưu thời gian
         saveLongTimeButton.addEventListener('click', () => {
             const ca = caInput.value;
-            const longTimeValue = parseFloat(longTimeInput.value);
+            const startTime = startTimeInput.value;
+            const endTime = endTimeInput.value;
+
             if (!ca) {
                 alert('Vui lòng chọn ca.');
                 return;
             }
-            if (!longTimeValue || longTimeValue <= 0) {
-                alert('Vui lòng nhập thời gian lỗi hợp lệ (phút).');
+            if (!startTime || !endTime) {
+                alert('Vui lòng nhập cả giờ bắt đầu và giờ kết thúc.');
                 return;
             }
-            elapsedMinutes = longTimeValue;
+
+            // Tạo đối tượng Date từ giờ bắt đầu và giờ kết thúc
+            const [startHours, startMinutes] = startTime.split(':').map(Number);
+            const [endHours, endMinutes] = endTime.split(':').map(Number);
+            const start = new Date();
+            start.setHours(startHours, startMinutes, 0, 0);
+            const end = new Date();
+            end.setHours(endHours, endMinutes, 0, 0);
+
+            // Tính toán thời gian lỗi (phút)
+            if (end < start) {
+                alert('Giờ kết thúc phải lớn hơn hoặc bằng giờ bắt đầu.');
+                return;
+            }
+            elapsedMinutes = (end - start) / (1000 * 60);
+            if (elapsedMinutes <= 0) {
+                alert('Thời gian lỗi phải lớn hơn 0 phút.');
+                return;
+            }
+
             alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
             errorInput.style.display = 'block';
             saveState();
@@ -231,8 +255,14 @@
                 return;
             }
 
+            const startTime = startTimeInput.value;
+            const endTime = endTimeInput.value;
+            const [startHours, startMinutes] = startTime.split(':').map(Number);
+            const [endHours, endMinutes] = endTime.split(':').map(Number);
             const vietnamStartTime = new Date();
-            const vietnamEndTime = new Date(vietnamStartTime.getTime() + elapsedMinutes * 60 * 1000);
+            vietnamStartTime.setHours(startHours, startMinutes, 0, 0);
+            const vietnamEndTime = new Date();
+            vietnamEndTime.setHours(endHours, endMinutes, 0, 0);
 
             const data = {
                 username: usernameInput.value,
@@ -255,7 +285,8 @@
                     alert('Lưu dữ liệu thành công.');
                     errorInput.style.display = 'none';
                     machineNameInput.value = machineName;
-                    longTimeInput.value = '';
+                    startTimeInput.value = '';
+                    endTimeInput.value = '';
                     solutionInput.value = '';
                     errorTypeInput.value = '';
                     document.getElementById('error').value = '';
