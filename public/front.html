@@ -45,7 +45,7 @@
             <option value="B">Ca B</option>
         </select>
         <div>
-            <label for="machineName">Tên aws:</label>
+            <label for="machineName">Tên máy:</label>
             <input type="text" id="machineName" placeholder="Nhập tên máy">
         </div>
         <div id="longTimeSection">
@@ -94,6 +94,8 @@
         const machineNameInput = document.getElementById('machineName');
         const solutionInput = document.getElementById('solution');
         const errorTypeInput = document.getElementById('errorType');
+        const errorInputField = document.getElementById('error');
+
         // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
             { username: 'Đậu Văn Nhớ', password: '1234' },
@@ -107,11 +109,20 @@
             { username: 'Bùi Hữu Gia Phú', password: '1234' },
             { username: 'hieu', password: '1234' }
         ];
-function updateShift() {
+
+        // Hàm định dạng thời gian theo múi giờ Việt Nam
+        function formatVietnamTime(date) {
+            const pad = (num) => String(num).padStart(2, '0');
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+        }
+
+        // Cập nhật ca mặc định
+        function updateShift() {
             caInput.value = 'A';
         }
         updateShift();
 
+        // Cập nhật thời gian hiện tại
         function updateTime() {
             const now = new Date();
             const vietnamTime = new Date(now.getTime() + 7 * 60 * 60 * 1000);
@@ -120,6 +131,7 @@ function updateShift() {
         }
         setInterval(updateTime, 1000);
 
+        // Lưu trạng thái vào localStorage
         function saveState() {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('username', usernameInput.value.trim());
@@ -127,6 +139,7 @@ function updateShift() {
             localStorage.setItem('machineName', machineNameInput.value.trim());
         }
 
+        // Tải trạng thái từ localStorage
         function loadState() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const savedUsername = localStorage.getItem('username');
@@ -142,10 +155,12 @@ function updateShift() {
             }
         }
 
+        // Xóa trạng thái
         function clearState() {
             localStorage.clear();
         }
 
+        // Xử lý đăng nhập
         loginButton.addEventListener('click', () => {
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
@@ -162,6 +177,7 @@ function updateShift() {
             }
         });
 
+        // Xử lý lưu thời gian lỗi
         saveLongTimeButton.addEventListener('click', () => {
             const ca = caInput.value;
             const startTime = document.getElementById('startTime').value;
@@ -199,18 +215,21 @@ function updateShift() {
             saveState();
         });
 
+        // Xử lý đăng xuất
         logoutButton.addEventListener('click', () => {
             clearState();
             mainSection.style.display = 'none';
             loginSection.style.display = 'block';
         });
 
+        // Xử lý lưu lỗi
         submitErrorButton.addEventListener('click', async () => {
             submitErrorButton.disabled = true;
             const errorType = errorTypeInput.value;
-            const errorName = document.getElementById('error').value.trim();
+            const errorName = errorInputField.value.trim();
             const machineName = machineNameInput.value.trim();
             const solution = solutionInput.value.trim();
+
             if (!errorType) {
                 alert('Vui lòng chọn loại lỗi.');
                 submitErrorButton.disabled = false;
@@ -241,13 +260,14 @@ function updateShift() {
                 username: usernameInput.value,
                 ca: caInput.value,
                 machineName: machineName,
-                startTime: startDate.toISOString(),
-                endTime: endDate.toISOString(),
+                startTime: formatVietnamTime(startDate),
+                endTime: formatVietnamTime(endDate),
                 error: errorName,
                 errorDuration: elapsedMinutes,
                 solution: solution,
                 errorType: errorType
             };
+
             try {
                 const response = await fetch('https://vercel-deploy-websavetime.vercel.app/api/back', {
                     method: 'POST',
@@ -262,7 +282,7 @@ function updateShift() {
                     document.getElementById('endTime').value = '';
                     solutionInput.value = '';
                     errorTypeInput.value = '';
-                    document.getElementById('error').value = '';
+                    errorInputField.value = '';
                     elapsedMinutes = null;
                 } else {
                     alert('Đã xảy ra lỗi khi lưu.');
@@ -274,6 +294,7 @@ function updateShift() {
             }
         });
 
+        // Tải trạng thái khi khởi động
         loadState();
     </script>
 </body>
