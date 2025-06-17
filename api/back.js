@@ -21,7 +21,7 @@ const logSchema = new mongoose.Schema({
   errorDuration: { type: Number, required: true },
   solution: { type: String, required: false },
   errorType: { type: String, required: true },
-  supporter: { type: String, required: false } // Thêm trường supporter
+  supporter: { type: String, required: true } // Thêm trường supporter
 });
 
 const Log = mongoose.model('Log', logSchema);
@@ -35,7 +35,7 @@ app.post('/api/back', async (req, res) => {
   const { username, ca, machineName, startTime, endTime, error, errorDuration, solution, errorType, supporter } = req.body;
 
   // Kiểm tra các trường bắt buộc
-  if (!username || !ca || !machineName || !startTime || !endTime || !error || !errorDuration || !errorType) {
+  if (!username || !ca || !machineName || !startTime || !endTime || !error || !errorDuration || !errorType || !supporter) {
     return res.status(400).json({ error: 'Dữ liệu không hợp lệ. Vui lòng cung cấp đầy đủ các trường bắt buộc.' });
   }
 
