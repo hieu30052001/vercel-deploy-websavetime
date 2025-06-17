@@ -12,7 +12,31 @@
         button { margin: 10px 0; padding: 10px 20px; }
         #currentTime { margin-top: 20px; font-weight: bold; }
         textarea { width: 100%; height: 80px; margin-top: 5px; }
-        input[type="time"] { margin-top: 5px; }
+        input[type="time"], input[type="date"] { margin-top: 5px; }
+        .time-section { 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            background-color: #f9f9f9; 
+        }
+        .time-group { 
+            display: flex; 
+            gap: 15px; 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        .time-group > div {
+            display: flex;
+            flex-direction: column;
+        }
+        .highlight-red { color: red; font-weight: bold; }
+        label { font-weight: bold; margin-bottom: 5px; }
+        input, select, textarea { 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+        }
     </style>
 </head>
 <body>
@@ -28,6 +52,8 @@
         <option value="Đợi ống lõi">
     </datalist>
     
+
+    
     <h1>Theo dõi thời gian sự cố máy</h1>
     <div id="loginSection">
         <label for="username">Tên đăng nhập:</label>
@@ -39,24 +65,47 @@
         <button id="loginButton">Đăng nhập</button>
     </div>
     <div id="mainSection" style="display: none;">
-        <label for="ca"><span class="highlight-red">B1</span>Ca:</label>
+        <label for="ca"><span class="highlight-red">B1</span> Ca:</label>
         <select id="ca">
             <option value="A">Ca A</option>
             <option value="B">Ca B</option>
         </select>
+        
         <div>
             <label for="machineName">Tên máy:</label>
             <input type="text" id="machineName" placeholder="Nhập tên máy">
         </div>
-        <div id="longTimeSection">
-            <label for="startTime"><span class="highlight-red">B2</span>Nhập giờ bắt đầu (24h):</label>
-            <input type="time" id="startTime" placeholder="HH:MM">
-            <label for="endTime"><span class="highlight-red">B3</span>Nhập giờ kết thúc (24h):</label>
-            <input type="time" id="endTime" placeholder="HH:MM">
-            <button id="saveLongTimeButton">Lưu thời gian</button>
+        
+        <div class="time-section">
+            <h3><span class="highlight-red">B2</span> Thời gian sự cố</h3>
+            
+            <div class="time-group">
+                <div>
+                    <label for="startDate">Ngày bắt đầu:</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div>
+                    <label for="startTime">Giờ bắt đầu:</label>
+                    <input type="time" id="startTime" placeholder="HH:MM">
+                </div>
+            </div>
+            
+            <div class="time-group">
+                <div>
+                    <label for="endDate">Ngày kết thúc:</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div>
+                    <label for="endTime">Giờ kết thúc:</label>
+                    <input type="time" id="endTime" placeholder="HH:MM">
+                </div>
+            </div>
+            
+            <button id="saveLongTimeButton"><span class="highlight-red">B3</span> Lưu thời gian</button>
         </div>
+        
         <div id="errorInput" style="display: none;">
-            <label for="errorType"><span class="highlight-red">B4</span>Loại lỗi:</label>
+            <label for="errorType"><span class="highlight-red">B4</span> Loại lỗi:</label>
             <select id="errorType">
                 <option value="">Chọn loại lỗi</option>
                 <option value="CM">CM</option>
@@ -67,18 +116,25 @@
                 <option value="COT">COT</option>
                 <option value="RM">RM</option>
             </select>
-            <label for="error"><span class="highlight-red">B5</span>Tên lỗi:</label>
+            
+            <label for="error"><span class="highlight-red">B5</span> Tên lỗi:</label>
             <input type="text" id="error" list="listOfError" placeholder="Nhập lỗi">
-            <label for="solution"><span class="highlight-red">B6</span>Hướng khắc phục:</label>
+            
+            <label for="supporter"><span class="highlight-red">B6</span> Người hỗ trợ:</label>
+            <input type="text" id="supporter" placeholder="Nhập tên người hỗ trợ">
+            
+            <label for="solution"><span class="highlight-red">B7</span> Hướng khắc phục:</label>
             <textarea id="solution" placeholder="Nhập hướng khắc phục"></textarea>
-            <button id="submitError"><span class="highlight-red">B7</span>Lưu</button>
+            
+            <button id="submitError"><span class="highlight-red">B8</span> Lưu</button>
         </div>
+        
         <div id="currentTime">Thời gian hiện tại: --:--:--</div>
         <button id="logoutButton">Đăng xuất</button>
     </div>
 
     <script>
-        let startDate, endDate, elapsedMinutes;
+        let startDateTime, endDateTime, elapsedMinutes;
 
         const loginSection = document.getElementById('loginSection');
         const mainSection = document.getElementById('mainSection');
@@ -95,6 +151,9 @@
         const solutionInput = document.getElementById('solution');
         const errorTypeInput = document.getElementById('errorType');
         const errorInputField = document.getElementById('error');
+        const supporterInput = document.getElementById('supporter');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
 
         // Danh sách tài khoản hợp lệ
         const VALID_CREDENTIALS = [
@@ -119,11 +178,16 @@
             return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
         }
 
-        // Cập nhật ca mặc định
-        function updateShift() {
+        // Cập nhật ca mặc định và ngày hiện tại
+        function updateDefaults() {
             caInput.value = 'A';
+            const today = new Date();
+            const vietnamTime = new Date(today.getTime() + 7 * 60 * 60 * 1000);
+            const todayString = vietnamTime.toISOString().split('T')[0];
+            startDateInput.value = todayString;
+            endDateInput.value = todayString;
         }
-        updateShift();
+        updateDefaults();
 
         // Cập nhật thời gian hiện tại
         function updateTime() {
@@ -140,6 +204,8 @@
             localStorage.setItem('username', usernameInput.value.trim());
             localStorage.setItem('ca', caInput.value);
             localStorage.setItem('machineName', machineNameInput.value.trim());
+            localStorage.setItem('startDate', startDateInput.value);
+            localStorage.setItem('endDate', endDateInput.value);
         }
 
         // Tải trạng thái từ localStorage
@@ -148,6 +214,8 @@
             const savedUsername = localStorage.getItem('username');
             const savedCa = localStorage.getItem('ca');
             const savedMachineName = localStorage.getItem('machineName');
+            const savedStartDate = localStorage.getItem('startDate');
+            const savedEndDate = localStorage.getItem('endDate');
 
             if (isLoggedIn) {
                 loginSection.style.display = 'none';
@@ -155,6 +223,8 @@
                 usernameInput.value = savedUsername || '';
                 caInput.value = savedCa || 'A';
                 machineNameInput.value = savedMachineName || '';
+                startDateInput.value = savedStartDate || startDateInput.value;
+                endDateInput.value = savedEndDate || endDateInput.value;
             }
         }
 
@@ -183,37 +253,48 @@
         // Xử lý lưu thời gian lỗi
         saveLongTimeButton.addEventListener('click', () => {
             const ca = caInput.value;
-            const startTime = document.getElementById('startTime').value;
-            const endTime = document.getElementById('endTime').value;
+            const startDateValue = startDateInput.value;
+            const endDateValue = endDateInput.value;
+            const startTimeValue = document.getElementById('startTime').value;
+            const endTimeValue = document.getElementById('endTime').value;
 
             if (!ca) {
                 alert('Vui lòng chọn ca.');
                 return;
             }
-            if (!startTime || !endTime) {
+            if (!startDateValue) {
+                alert('Vui lòng chọn ngày bắt đầu.');
+                return;
+            }
+            if (!endDateValue) {
+                alert('Vui lòng chọn ngày kết thúc.');
+                return;
+            }
+            if (!startTimeValue || !endTimeValue) {
                 alert('Vui lòng nhập cả giờ bắt đầu và giờ kết thúc.');
                 return;
             }
 
-            const now = new Date();
-            const [startHour, startMin] = startTime.split(':').map(Number);
-            const [endHour, endMin] = endTime.split(':').map(Number);
+            const [startHour, startMin] = startTimeValue.split(':').map(Number);
+            const [endHour, endMin] = endTimeValue.split(':').map(Number);
+            
+            startDateTime = new Date(startDateValue);
+            startDateTime.setHours(startHour, startMin, 0, 0);
+            
+            endDateTime = new Date(endDateValue);
+            endDateTime.setHours(endHour, endMin, 0, 0);
 
-            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startHour, startMin);
-            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), endHour, endMin);
-
-            if (endDate < startDate) {
-                endDate.setDate(endDate.getDate() + 1);
-            }
-
-            const diffMs = endDate - startDate;
+            const diffMs = endDateTime - startDateTime;
             if (diffMs <= 0) {
-                alert('Giờ kết thúc phải sau giờ bắt đầu.');
+                alert('Thời gian kết thúc phải sau thời gian bắt đầu.');
                 return;
             }
 
             elapsedMinutes = diffMs / (1000 * 60);
-            alert(`Thời gian lỗi: ${elapsedMinutes} phút`);
+            const hours = Math.floor(elapsedMinutes / 60);
+            const minutes = Math.floor(elapsedMinutes % 60);
+            alert(`Thời gian lỗi: ${hours} giờ ${minutes} phút (${elapsedMinutes} phút)`);
+            
             errorInput.style.display = 'block';
             saveState();
         });
@@ -232,6 +313,7 @@
             const errorName = errorInputField.value.trim();
             const machineName = machineNameInput.value.trim();
             const solution = solutionInput.value.trim();
+            const supporter = supporterInput.value.trim();
 
             if (!errorType) {
                 alert('Vui lòng chọn loại lỗi.');
@@ -245,6 +327,11 @@
             }
             if (!machineName) {
                 alert('Vui lòng nhập tên máy.');
+                submitErrorButton.disabled = false;
+                return;
+            }
+            if (!supporter) {
+                alert('Vui lòng nhập người hỗ trợ.');
                 submitErrorButton.disabled = false;
                 return;
             }
@@ -263,12 +350,13 @@
                 username: usernameInput.value,
                 ca: caInput.value,
                 machineName: machineName,
-                startTime: formatVietnamTime(startDate),
-                endTime: formatVietnamTime(endDate),
+                startTime: formatVietnamTime(startDateTime),
+                endTime: formatVietnamTime(endDateTime),
                 error: errorName,
                 errorDuration: elapsedMinutes,
                 solution: solution,
-                errorType: errorType
+                errorType: errorType,
+                supporter: supporter
             };
 
             try {
@@ -286,6 +374,7 @@
                     solutionInput.value = '';
                     errorTypeInput.value = '';
                     errorInputField.value = '';
+                    supporterInput.value = '';
                     elapsedMinutes = null;
                 } else {
                     alert('Đã xảy ra lỗi khi lưu.');
@@ -294,6 +383,13 @@
                 alert('Lỗi kết nối hoặc máy chủ.');
             } finally {
                 submitErrorButton.disabled = false;
+            }
+        });
+
+        // Xử lý Enter để đăng nhập
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginButton.click();
             }
         });
 
